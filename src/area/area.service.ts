@@ -5,11 +5,11 @@ import { UpdateAreaDto } from './dto/update-area.dto';
 @Injectable()
 export class AreaService {
   create(createAreaDto: CreateAreaDto) {
-    return 'This action adds a new area';
+    return 'se va a crear la siguiente Area ' + createAreaDto.nombre;
   }
 
   findAll() {
-    return `This action returns all area`;
+    return `aca van todas las areas`;
   }
 
   findOne(id: number) {
