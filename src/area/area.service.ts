@@ -1,15 +1,26 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateAreaDto } from './dto/create-area.dto';
 import { UpdateAreaDto } from './dto/update-area.dto';
+import { Area } from './entities/area.entity';
 
 @Injectable()
 export class AreaService {
-  create(createAreaDto: CreateAreaDto) {
-    return 'se va a crear la siguiente Area ' + createAreaDto.nombre;
+
+  constructor(
+    @InjectRepository(Area)
+    private readonly AreaRepository: Repository<Area>
+  ){}
+
+  async create(createAreaDto: CreateAreaDto) {
+    const area = this.AreaRepository.create(createAreaDto);
+    return await this.AreaRepository.save(area);
   }
 
   findAll() {
-    return `aca van todas las areas`;
+    return this.AreaRepository.find()
+
   }
 
   findOne(id: number) {
