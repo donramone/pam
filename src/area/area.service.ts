@@ -19,19 +19,20 @@ export class AreaService {
   }
 
   findAll() {
-    return this.AreaRepository.find()
-
+    return this.AreaRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} area`;
+    return this.AreaRepository.findOne(id);
   }
 
   update(id: number, updateAreaDto: UpdateAreaDto) {
-    return `This action updates a #${id} area`;
+    this.AreaRepository.update({ id }, updateAreaDto);
+    return this.AreaRepository.findOne({ id });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} area`;
+    this.AreaRepository.delete({ id });
+    return { deleted: true };
   }
 }
