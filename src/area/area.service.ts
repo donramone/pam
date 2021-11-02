@@ -15,23 +15,28 @@ export class AreaService {
 
   async create(createAreaDto: CreateAreaDto) {
     const area = this.AreaRepository.create(createAreaDto);
-    return await this.AreaRepository.save(area);
+    await this.AreaRepository.save(area);
+    return area;
   }
 
-  findAll() {
-    return this.AreaRepository.find()
+  async findAll() {
+    return await this.AreaRepository.find()
 
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} area`;
+  async findOne(id: number) {
+    const area = await this.AreaRepository.findOne(id);
+    return area;
   }
 
-  update(id: number, updateAreaDto: UpdateAreaDto) {
-    return `This action updates a #${id} area`;
+  async update(id: number, updateAreaDto: UpdateAreaDto) {
+    await this.AreaRepository.update({ id }, updateAreaDto);
+    return await this.AreaRepository.findOne({ id });
+
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} area`;
+  async remove(id: number) {
+    await this.AreaRepository.delete({ id });
+    return { deleted: true };
   }
 }

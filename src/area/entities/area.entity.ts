@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 // @Entity('Areas')
 @Entity()
 export class Area {
@@ -10,4 +10,7 @@ export class Area {
 
     @CreateDateColumn({ type: "timestamp"})
     createdAt: Date;
+    
+    @UpdateDateColumn({ type: "timestamp" })
+    public updated_at: Date;
 }
