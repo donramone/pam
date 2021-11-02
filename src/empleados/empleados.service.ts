@@ -12,23 +12,30 @@ export class EmpleadosService {
     private readonly EmpleadoRepository: Repository<Empleado>
   ){}
 
-  create(createEmpleadoDto: CreateEmpleadoDto) {
-    return 'This action adds a new empleado';
+  async create(createEmpleadoDto: CreateEmpleadoDto) {
+    const empleado = this.EmpleadoRepository.create(createEmpleadoDto);
+    await this.EmpleadoRepository.save(empleado);
+    return empleado;
   }
 
-  findAll() {
-    return `listado de todos los empleados`;
+  async findAll() {
+    return await this.EmpleadoRepository.find()
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} empleado`;
+  async findOne(id: number) {
+    const empleado = await this.EmpleadoRepository.findOne(id);
+    return empleado;
   }
 
-  update(id: number, updateEmpleadoDto: UpdateEmpleadoDto) {
-    return `This action updates a #${id} empleado`;
+  async update(id: number, updateEmpleadoDto: UpdateEmpleadoDto) {
+    await this.EmpleadoRepository.update({ id }, updateEmpleadoDto);
+    return await this.EmpleadoRepository.findOne({ id });
+
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} empleado`;
+  async remove(id: number) {
+    await this.EmpleadoRepository.delete({ id });
+    // armar control para ver si tiene que devolver true o false
+    return { deleted: true };
   }
 }
