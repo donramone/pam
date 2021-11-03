@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Area } from "src/area/entities/area.entity";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Empleado {
@@ -30,7 +31,8 @@ export class Empleado {
     @Column({ type: "double" })
     salario: number;
 
-    // area: number;
+    @ManyToOne( () => Area, (area) => area.empleados )
+    area: Area;
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     public created_at: Date;

@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Empleado } from "src/empleados/entities/empleado.entity";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 // @Entity('Areas')
 @Entity()
 export class Area {
@@ -8,8 +9,11 @@ export class Area {
     @Column({ type: "varchar", length: 120})
     nombre: string;
 
+    @OneToMany( () => Empleado, (empleado) => empleado.area )
+    empleados: Empleado;
+    
     @CreateDateColumn({ type: "timestamp"})
-    createdAt: Date;
+    created_at: Date;
     
     @UpdateDateColumn({ type: "timestamp" })
     public updated_at: Date;
