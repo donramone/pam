@@ -17,23 +17,28 @@ export class EmpleadosService {
     await this.EmpleadoRepository.save(empleado);
     return empleado;
   }
+  async update(id: number, updateEmpleadoDto: UpdateEmpleadoDto) {
+    await this.EmpleadoRepository.update({ id }, updateEmpleadoDto);
+    return await this.EmpleadoRepository.findOne({ id });
 
+  }
   async findAll() {
     return await this.EmpleadoRepository.find( {
       relations: ['area'] } )
   }
-
-  async findOne(id: number) {
+  async findOne(id: number): Promise<Empleado> {
     const empleado = await this.EmpleadoRepository.findOne(id, {
       relations: ['area'],
     });
     return empleado;
   }
-
-  async update(id: number, updateEmpleadoDto: UpdateEmpleadoDto) {
-    await this.EmpleadoRepository.update({ id }, updateEmpleadoDto);
-    return await this.EmpleadoRepository.findOne({ id });
-
+  async findByDni(dni: string): Promise<Empleado> {
+    const empleado = await this.EmpleadoRepository.findOne(
+      {dni: dni}, {
+      relations: ['area'],
+      }
+    );
+    return empleado;
   }
   async findByArea(id: number) {
     const empleados =  await this.EmpleadoRepository.createQueryBuilder('empleado')

@@ -15,7 +15,7 @@ export class EmpleadosController {
   @Get()
   findAll() {
     return this.empleadosService.findAll();
-    // ver como pasar por parametro el area
+    // return this.empleadosService.findByDni("29418853");
     // return this.empleadosService.findByArea(3);
   }
 
