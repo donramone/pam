@@ -19,16 +19,16 @@ export class Empleado {
     @Column({ type: "varchar", length: 180 })
     direccion: string;
     
-    @Column({ type: "varchar", length: 12 })
+    @Column({ type: "varchar", length: 12, nullable: true })
     telefono: string;
     
-    @Column({ type: "varchar", length: 50 })
+    @Column({ type: "varchar", length: 50, nullable: true })
     email: string;
 
-    @Column({ type: "varchar", length: 75 })
+    @Column({ type: "varchar", length: 75, nullable: true , default: "No especifica"  })
     ocupacion: string;
 
-    @Column({ type: "double" })
+    @Column({ nullable: false, type: "float", default: 0.0 })
     salario: number;
 
     @ManyToOne( () => Area, (area) => area.empleados )

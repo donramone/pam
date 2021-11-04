@@ -19,11 +19,14 @@ export class EmpleadosService {
   }
 
   async findAll() {
-    return await this.EmpleadoRepository.find()
+    return await this.EmpleadoRepository.find( {
+      relations: ['area'] } )
   }
 
   async findOne(id: number) {
-    const empleado = await this.EmpleadoRepository.findOne(id);
+    const empleado = await this.EmpleadoRepository.findOne(id, {
+      relations: ['area'],
+    });
     return empleado;
   }
 
@@ -32,7 +35,15 @@ export class EmpleadosService {
     return await this.EmpleadoRepository.findOne({ id });
 
   }
-
+  async findByArea(id: number) {
+    const empleados =  await this.EmpleadoRepository.createQueryBuilder('empleado')
+    .where('area.id = :id' , { id: id })
+    // .where({ id: id})
+    .select(['empleado.id', 'empleado.nombre', 'empleado.salario', 'area.id', 'area.nombre'])
+    .leftJoin('empleado.area', 'area')  
+    .getMany();
+    return empleados;
+  }
   async remove(id: number) {
     await this.EmpleadoRepository.delete({ id });
     // armar control para ver si tiene que devolver true o false

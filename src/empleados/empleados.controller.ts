@@ -15,6 +15,8 @@ export class EmpleadosController {
   @Get()
   findAll() {
     return this.empleadosService.findAll();
+    // ver como pasar por parametro el area
+    // return this.empleadosService.findByArea(3);
   }
 
   @Get(':id')
