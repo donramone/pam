@@ -1,5 +1,14 @@
 import { Area } from "src/area/entities/area.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Pago } from "src/pagos/entities/pago.entity";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity()
 export class Empleado {
@@ -31,6 +40,13 @@ export class Empleado {
     @Column({ nullable: false, type: "float", default: 0.0 })
     salario: number;
 
+    /* Agregar status
+    @Column({ nullable: false, type: "varchar", length: 50, default: "ACTIVO" })
+    estado: string;
+    */
+    @OneToMany( () => Pago, (pago) => pago.empleado )
+    pagos: Pago;
+   
     @ManyToOne( () => Area, (area) => area.empleados )
     area: Area;
 
