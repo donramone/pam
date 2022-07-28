@@ -4,6 +4,7 @@ import { ValidationPipe, Logger } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
   // app.setGlobalPrefix('pam');
   const logger = new Logger();
   app.useGlobalPipes(new ValidationPipe());

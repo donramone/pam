@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { AreaModule } from './area/area.module';
 
 import { EmpleadosModule } from './empleados/empleados.module';
+import { PagosModule } from './pagos/pagos.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { EmpleadosModule } from './empleados/empleados.module';
     }),
     AreaModule,
     EmpleadosModule,
+    PagosModule,
   ],
   controllers: [AppController],
   providers: [AppService],

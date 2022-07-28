@@ -11,6 +11,7 @@ export class CreateEmpleadoDto {
     email: string;
     ocupacion: string;
     salario: number;
-    area: number;
+    // Si solo se llama area me da error??
+  //  areaId: number;
     
 }
