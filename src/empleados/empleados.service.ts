@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateEmpleadoDto } from './dto/create-empleado.dto';
@@ -7,32 +7,37 @@ import { Empleado } from './entities/empleado.entity';
 
 @Injectable()
 export class EmpleadosService {
+  logger = new Logger();
   constructor(
     @InjectRepository(Empleado)
     private readonly EmpleadoRepository: Repository<Empleado>,
   ) {}
 
   async create(createEmpleadoDto: CreateEmpleadoDto) {
+    this.logger.log('createee loggerrr');
     const empleado = this.EmpleadoRepository.create(createEmpleadoDto);
     await this.EmpleadoRepository.save(empleado);
-    console.log("en el service guardo");
-    console.log(empleado);
-    
-    
+    this.logger.log('en el service guardo');
     return empleado;
   }
+
   async update(id: number, updateEmpleadoDto: UpdateEmpleadoDto) {
     console.log('Update emppleado service ID ', id, ' DTO ', updateEmpleadoDto);
     await this.EmpleadoRepository.update({ id }, updateEmpleadoDto);
     return await this.EmpleadoRepository.findOne({ id });
   }
+  async remove(id: number) {
+    return await this.EmpleadoRepository.delete({ id });
+    // armar control para ver si tiene que devolver true o false
+  }
   async findAll() {
+    this.logger.log('Fin em ALL empleado service!');
     console.log('find em ALL');
     return await this.EmpleadoRepository.find({
       relations: ['area'],
     });
   }
-
+/*
   async findByDni(dni: string): Promise<Empleado> {
     console.log('finByDNI');
 
@@ -44,7 +49,7 @@ export class EmpleadosService {
     );
     return empleado;
   }
-
+*/
   async findById(id: string): Promise<Empleado> {
     console.log('find by id service');
 
@@ -73,10 +78,5 @@ export class EmpleadosService {
     console.log('FindByArea ', empleados);
 
     return empleados;
-  }
-  async remove(id: number) {
-    await this.EmpleadoRepository.delete({ id });
-    // armar control para ver si tiene que devolver true o false
-    return { deleted: true };
   }
 }

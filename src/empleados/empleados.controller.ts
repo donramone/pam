@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Logger,
 } from '@nestjs/common';
 import { EmpleadosService } from './empleados.service';
 import { CreateEmpleadoDto } from './dto/create-empleado.dto';
@@ -13,13 +14,12 @@ import { UpdateEmpleadoDto } from './dto/update-empleado.dto';
 
 @Controller('empleados')
 export class EmpleadosController {
+  logger = new Logger();
   constructor(private readonly empleadosService: EmpleadosService) {}
 
   @Post()
   create(@Body() createEmpleadoDto: CreateEmpleadoDto) {
-    console.log("en el back end va a crear");
     console.log(createEmpleadoDto);
-    
     return this.empleadosService.create(createEmpleadoDto);
   }
   /*
@@ -56,9 +56,9 @@ export class EmpleadosController {
 
     return this.empleadosService.update(id, updateEmpleadoDto);
   }
-
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.empleadosService.remove(+id);
+  remove(@Param('id') id: number) {
+    this.logger.log('delete id controller back');
+    return this.empleadosService.remove(id);
   }
 }

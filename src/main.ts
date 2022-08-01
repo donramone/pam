@@ -9,6 +9,6 @@ async function bootstrap() {
   const logger = new Logger();
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(3000);
-  logger.log(`Servidor corriendo en ${ await app.getUrl() }`);
+  logger.log(`Servidor corriendo en ${await app.getUrl()}`);
 }
 bootstrap();
