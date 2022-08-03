@@ -18,7 +18,9 @@ export class Pago {
   @Column({ nullable: false, type: 'varchar' })
   periodo: string;
 
-  @ManyToOne(() => Empleado, (empleado: Empleado) => empleado.pagos )
+  @ManyToOne(() => Empleado, (empleado: Empleado) => empleado.pagos, {
+    onDelete: 'CASCADE',
+  })
   empleado: Empleado;
 
   @CreateDateColumn({

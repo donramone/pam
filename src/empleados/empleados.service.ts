@@ -14,7 +14,6 @@ export class EmpleadosService {
   ) {}
 
   async create(createEmpleadoDto: CreateEmpleadoDto) {
-    this.logger.log('createee loggerrr');
     const empleado = this.EmpleadoRepository.create(createEmpleadoDto);
     await this.EmpleadoRepository.save(empleado);
     this.logger.log('en el service guardo');
@@ -51,11 +50,11 @@ export class EmpleadosService {
   }
 */
   async findById(id: string): Promise<Empleado> {
-    console.log('find by id service');
-
     const empleado = await this.EmpleadoRepository.findOne(id, {
       relations: ['area'],
     });
+    console.log('empleado findByid');
+    console.log(empleado);
     return empleado;
   }
 

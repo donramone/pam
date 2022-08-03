@@ -22,16 +22,11 @@ export class EmpleadosController {
     console.log(createEmpleadoDto);
     return this.empleadosService.create(createEmpleadoDto);
   }
-  /*
-    @Get(':id')
-        async getbyId(@Req() request: Request) {
-            return await this.crudService.getById(this.tableName, request.params.id);
-        }
-*/
+
   @Get(':id')
   findById(@Param('id') id: string) {
-    //return this.empleadosService.findById(id);
-    return this.empleadosService.findByArea(id);
+    return this.empleadosService.findById(id);
+    //return this.empleadosService.findByArea(id);
   }
 /*
   @Get('area/:id')
@@ -42,9 +37,6 @@ export class EmpleadosController {
   @Get()
   findAll() {
     return this.empleadosService.findAll();
-    //return this.empleadosService.findByDni("29418853");
-    //return this.empleadosService.findById(9);
-    //return this.empleadosService.findByArea(3);
   }
 
   @Patch(':id')
@@ -52,13 +44,11 @@ export class EmpleadosController {
     @Param('id') id: number,
     @Body() updateEmpleadoDto: UpdateEmpleadoDto,
   ) {
-    //console.log('Voy actualizar en controler ', updateEmpleadoDto);
-
     return this.empleadosService.update(id, updateEmpleadoDto);
   }
+
   @Delete(':id')
   remove(@Param('id') id: number) {
-    this.logger.log('delete id controller back');
     return this.empleadosService.remove(id);
   }
 }
