@@ -5,12 +5,12 @@ export class CreateEmpleadoDto {
   nombre: string;
   @IsNotEmpty({ message: 'El DNI no puede estar vacio' })
   dni: string;
-  fechaNacimiento: string;
+  fechaNacimiento: Date;
   direccion: string;
   telefono: string;
   email: string;
   ocupacion: string;
   salario: number;
   // Si solo se llama area me da error??
-  //  areaId: number;
+  areaId: number;
 }

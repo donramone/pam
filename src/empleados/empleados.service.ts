@@ -14,15 +14,19 @@ export class EmpleadosService {
   ) {}
 
   async create(createEmpleadoDto: CreateEmpleadoDto) {
+    this.logger.log('lo que llega');
+    this.logger.log(createEmpleadoDto);
     const empleado = this.EmpleadoRepository.create(createEmpleadoDto);
+    this.logger.log('El nuevo empleado es');
+    this.logger.log(JSON.stringify(empleado));
     await this.EmpleadoRepository.save(empleado);
-    this.logger.log('en el service guardo');
     return empleado;
   }
 
   async update(id: number, updateEmpleadoDto: UpdateEmpleadoDto) {
-    console.log('Update emppleado service ID ', id, ' DTO ', updateEmpleadoDto);
-    await this.EmpleadoRepository.update({ id }, updateEmpleadoDto);
+    this.logger.log(updateEmpleadoDto);
+    const empleado = this.EmpleadoRepository.create(updateEmpleadoDto);
+    await this.EmpleadoRepository.update({ id }, empleado);
     return await this.EmpleadoRepository.findOne({ id });
   }
   async remove(id: number) {
@@ -36,7 +40,8 @@ export class EmpleadosService {
       relations: ['area'],
     });
   }
-/*
+
+  /*
   async findByDni(dni: string): Promise<Empleado> {
     console.log('finByDNI');
 
@@ -59,7 +64,6 @@ export class EmpleadosService {
   }
 
   async findByArea(id: string) {
-    console.log(`FinByArea service ${id}`);
     const empleados = await this.EmpleadoRepository.createQueryBuilder(
       'empleado',
     )
@@ -74,8 +78,6 @@ export class EmpleadosService {
       ])
       .leftJoin('empleado.area', 'area')
       .getMany();
-    console.log('FindByArea ', empleados);
-
     return empleados;
   }
 }

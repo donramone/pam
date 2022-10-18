@@ -17,6 +17,13 @@ export class EmpleadosController {
   logger = new Logger();
   constructor(private readonly empleadosService: EmpleadosService) {}
 
+  @Patch(':id')
+  update(
+    @Param('id') id: number,
+    @Body() updateEmpleadoDto: UpdateEmpleadoDto,
+  ) {
+    return this.empleadosService.update(id, updateEmpleadoDto);
+  }
   @Post()
   create(@Body() createEmpleadoDto: CreateEmpleadoDto) {
     console.log(createEmpleadoDto);
@@ -26,9 +33,15 @@ export class EmpleadosController {
   @Get(':id')
   findById(@Param('id') id: string) {
     return this.empleadosService.findById(id);
-    //return this.empleadosService.findByArea(id);
   }
-/*
+  @Get('area/:areaId')
+  findByArea(@Param('areaId') id: string) {
+    return this.empleadosService.findByArea(id);
+  }
+  /*
+/employees?dept='HR'
+/employee?id=1234&dept='HR'
+/comapny/:companyId    /staff/:staffId
   @Get('area/:id')
   findByArea(@Param('id') id: string) {
     return this.empleadosService.findByArea(id);
@@ -37,14 +50,6 @@ export class EmpleadosController {
   @Get()
   findAll() {
     return this.empleadosService.findAll();
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: number,
-    @Body() updateEmpleadoDto: UpdateEmpleadoDto,
-  ) {
-    return this.empleadosService.update(id, updateEmpleadoDto);
   }
 
   @Delete(':id')

@@ -1,5 +1,5 @@
-import { Area } from 'src/area/entities/area.entity';
-import { Pago } from 'src/pagos/entities/pago.entity';
+import { Area } from '../../area/entities/area.entity';
+import { Pago } from '../../pagos/entities/pago.entity';
 import {
   Column,
   CreateDateColumn,
@@ -21,8 +21,8 @@ export class Empleado {
   @Column({ type: 'varchar', length: 8 })
   dni: string;
 
-  @Column({ type: 'date', nullable: true, default: '1982-01-01' })
-  fecha_nacimiento: Date;
+  @Column({ type: 'timestamp', name: 'fecha_nacimiento' })
+  fechaNacimiento: Date;
 
   @Column({ type: 'varchar', length: 180 })
   direccion: string;
@@ -44,10 +44,9 @@ export class Empleado {
   @Column({ nullable: false, type: 'float', default: 0.0 })
   salario: number;
 
-  /* Agregar status
-    @Column({ nullable: false, type: "varchar", length: 50, default: "ACTIVO" })
-    estado: string;
-    */
+  @Column({ nullable: false, type: 'boolean' })
+  estado: boolean;
+
   @OneToMany(() => Pago, (pago) => pago.empleado)
   pagos: Pago;
 
