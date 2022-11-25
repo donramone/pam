@@ -35,7 +35,6 @@ export class EmpleadosService {
   }
   async findAll() {
     this.logger.log('Fin em ALL empleado service!');
-    console.log('find em ALL');
     return await this.EmpleadoRepository.find({
       relations: ['area'],
     });

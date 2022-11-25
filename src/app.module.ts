@@ -18,7 +18,7 @@ import { PagosModule } from './pagos/pagos.module';
       database: 'pam_dev',
       entities: [__dirname + './**/**/*entity{.ts,.js}'],
       autoLoadEntities: true,
-      synchronize: true,
+      synchronize: false,
     }),
     AreaModule,
     EmpleadosModule,

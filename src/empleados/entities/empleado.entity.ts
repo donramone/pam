@@ -21,6 +21,9 @@ export class Empleado {
   @Column({ type: 'varchar', length: 8 })
   dni: string;
 
+  @Column({ type: 'varchar', length: 11 })
+  cuil: string;
+
   @Column({ type: 'timestamp', name: 'fecha_nacimiento' })
   fechaNacimiento: Date;
 
