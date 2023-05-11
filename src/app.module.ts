@@ -6,6 +6,8 @@ import { AreaModule } from './area/area.module';
 
 import { EmpleadosModule } from './empleados/empleados.module';
 import { PagosModule } from './pagos/pagos.module';
+import { AcreditacionesModule } from './acreditaciones/acreditaciones.module';
+
 
 @Module({
   imports: [
@@ -23,6 +25,7 @@ import { PagosModule } from './pagos/pagos.module';
     AreaModule,
     EmpleadosModule,
     PagosModule,
+    AcreditacionesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -5,5 +5,4 @@ export class CreatePagoDto {
   monto: number;
   periodo: string;
   empleadoId: number;
-
 }

@@ -39,6 +39,10 @@ export class PagosController {
   findOne(@Param('id') id: string) {
     return this.pagosService.findOne(+id);
   }
+  @Get('/acreditacion/:id')
+  getById(@Param('id') id: string) {
+    return this.pagosService.getById(+id);
+  }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePagoDto: UpdatePagoDto) {

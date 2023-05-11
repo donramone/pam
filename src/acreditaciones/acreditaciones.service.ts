@@ -1,0 +1,35 @@
+import { Injectable } from '@nestjs/common';
+import { CreateAcreditacionesDto } from './dto/create-acreditaciones.dto';
+import { UpdateAcreditacioneDto } from './dto/update-acreditaciones.dto';
+import { Acreditaciones } from './entities/acreditacione.entity';
+import { Repository } from 'typeorm/repository/Repository';
+import { InjectRepository } from '@nestjs/typeorm';
+
+@Injectable()
+export class AcreditacionesService {
+  constructor(
+    @InjectRepository(Acreditaciones)
+    private readonly AcreditacionesRepository: Repository<Acreditaciones>,
+  ) {}
+  async create(createAcreditacionesDto: CreateAcreditacionesDto) {
+    const acreditacion = this.AcreditacionesRepository.create(createAcreditacionesDto);
+    await this.AcreditacionesRepository.save(acreditacion);
+    return acreditacion;
+  }
+
+  async findAll() {
+    return await this.AcreditacionesRepository.find();
+  }
+
+  findOne(id: number) {
+    return `This action returns a #${id} acreditacione`;
+  }
+
+  update(id: number, updateAcreditacioneDto: UpdateAcreditacioneDto) {
+    return `This action updates a #${id} acreditacione`;
+  }
+
+  remove(id: number) {
+    return `This action removes a #${id} acreditacione`;
+  }
+}

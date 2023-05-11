@@ -67,4 +67,9 @@ export class PagosService {
   remove(id: number) {
     return `This action removes a #${id} pago`;
   }
+  // traer las acreditaciones
+  getById(id: number) {
+    return `getByID retorna #${id} Acreditacion`;
+  }
+
 }
