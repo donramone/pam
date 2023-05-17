@@ -12,7 +12,9 @@ export class AcreditacionesService {
     private readonly AcreditacionesRepository: Repository<Acreditaciones>,
   ) {}
   async create(createAcreditacionesDto: CreateAcreditacionesDto) {
-    const acreditacion = this.AcreditacionesRepository.create(createAcreditacionesDto);
+    const acreditacion = this.AcreditacionesRepository.create(
+      createAcreditacionesDto,
+    );
     await this.AcreditacionesRepository.save(acreditacion);
     return acreditacion;
   }
@@ -21,14 +23,16 @@ export class AcreditacionesService {
     return await this.AcreditacionesRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} acreditacione`;
-  }
+  async findOne(id: number) {
+    const acreditacion = await this.AcreditacionesRepository.findOne(id);
 
+    return acreditacion;
+  }
+/*
   update(id: number, updateAcreditacioneDto: UpdateAcreditacioneDto) {
     return `This action updates a #${id} acreditacione`;
   }
-
+*/
   remove(id: number) {
     return `This action removes a #${id} acreditacione`;
   }

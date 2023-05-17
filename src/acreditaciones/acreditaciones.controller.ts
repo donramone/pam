@@ -35,7 +35,7 @@ export class AcreditacionesController {
     @Param('id') id: string,
     @Body() updateAcreditacioneDto: UpdateAcreditacioneDto,
   ) {
-    return this.acreditacionesService.update(+id, updateAcreditacioneDto);
+   // return this.acreditacionesService.update(+id, updateAcreditacioneDto);
   }
 
   @Delete(':id')

@@ -20,9 +20,6 @@ export class Acreditaciones {
   salario: number;
 
   @Column({ nullable: true })
-  totalEmpleados: number;
-
-  @Column({ nullable: true })
   periodoMes: number;
 
   @CreateDateColumn({
