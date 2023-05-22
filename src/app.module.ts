@@ -25,7 +25,7 @@ import { AcreditacionesModule } from './acreditaciones/acreditaciones.module';
     AreaModule,
     EmpleadosModule,
     PagosModule,
-    AcreditacionesModule,
+  //  AcreditacionesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

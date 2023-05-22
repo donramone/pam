@@ -1,7 +1,6 @@
 export class CreateAcreditacionesDto {
-  empleadoId: number;
   areaId: number;
-  salario: number;
- // totalEmpleado: number;
+  totalImporte: number;
+  totalEmpleado: number;
   periodoMes: number;
 }
