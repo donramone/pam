@@ -1,10 +1,13 @@
+import { Empleado } from 'src/empleados/entities/empleado.entity';
 import { Acreditacion } from './acreditacion.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 
@@ -18,20 +21,20 @@ export class AcreditacionEmpleado {
   empleadoID: number;
 
   @Column({ nullable: true })
-  areaID: number;
-
-  @Column({ nullable: true })
   salario: number;
 
-  @Column({ nullable: true })
-  periodoMes: number;
+  @ManyToOne(() => Acreditacion, acreditacion => acreditacion.acreditacionEmpleados)
+  @JoinColumn({ name: 'acreditacionID' })
+  acreditacion: Acreditacion;
 
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
-  public created_at: Date;
+  @ManyToOne(() => Empleado, empleado => empleado.acreditacionEmpleados)
+  @JoinColumn({ name: 'empleadoID' })
+  empleado: Empleado
 
- // @ManyToOne(() => Acreditacion, a => a.acreditacionEmpleados)
-//  acreditacion: Acreditacion;
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  created_at: Date;
+
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updated_at: Date;
+  
 }

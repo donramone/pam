@@ -1,5 +1,6 @@
-import { Empleado } from '../../empleados/entities/empleado.entity';
 //import { Empleado } from 'src/empleados/entities/empleado.entity';
+/*
+import { Empleado } from 'src/empleados/entities/empleado.entity';
 import {
   Column,
   CreateDateColumn,
@@ -13,20 +14,27 @@ export class Pago {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false, type: 'float', default: 0.0 })
-  monto: number;
+  @Column({ nullable: true })
+  areaID: number;
 
-  @Column({ nullable: false, type: 'varchar' })
-  periodo: string;
+  @Column({ name: 'total_importe', nullable: true })
+  totalImporte: number;
 
-  @ManyToOne(() => Empleado, (empleado: Empleado) => empleado.pagos, {
-    onDelete: 'CASCADE',
-  })
-  empleado: Empleado;
+  @Column({ name: 'total_empleados', nullable: true })
+  totalEmpleados: number;
 
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
-  public created_at: Date;
+  @Column({ name: 'periodo_mes', nullable: true })
+  periodoMes: number;
+
+  @ManyToOne(() => Empleado, emp => emp.pagos )
+  empleado: Empleado[];
+
+
+    @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  created_at: Date;
+
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updated_at: Date;
+  
 }
+*/

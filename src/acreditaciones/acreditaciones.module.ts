@@ -1,12 +1,15 @@
 import { Module } from '@nestjs/common';
 import { AcreditacionesService } from './acreditaciones.service';
 import { AcreditacionesController } from './acreditaciones.controller';
-import { Acreditacion } from './entities/acreditacion.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Acreditacion } from './entities/acreditacion.entity';
 import { AcreditacionEmpleado } from './entities/acreditacionEmpleado.entity';
+import { Area } from 'src/area/entities/area.entity';
+import { Empleado } from 'src/empleados/entities/empleado.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Acreditacion, AcreditacionEmpleado])],
+   imports: [TypeOrmModule.forFeature([AcreditacionEmpleado, Acreditacion, Area,Empleado])],
+ // imports: [TypeOrmModule.forFeature([AcreditacionEmpleado])],
   controllers: [AcreditacionesController],
   providers: [AcreditacionesService]
 })

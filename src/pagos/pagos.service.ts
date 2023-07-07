@@ -1,9 +1,10 @@
+/*
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePagoDto } from './dto/create-pago.dto';
 import { UpdatePagoDto } from './dto/update-pago.dto';
-import { Pago } from './entities/pago.entity';
+//import { Pago } from './entities/pago.entity';
 
 @Injectable()
 export class PagosService {
@@ -73,3 +74,4 @@ export class PagosService {
   }
 
 }
+*/

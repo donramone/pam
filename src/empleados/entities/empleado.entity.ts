@@ -1,5 +1,5 @@
+import { AcreditacionEmpleado } from 'src/acreditaciones/entities/acreditacionEmpleado.entity';
 import { Area } from '../../area/entities/area.entity';
-import { Pago } from '../../pagos/entities/pago.entity';
 import {
   Column,
   CreateDateColumn,
@@ -50,9 +50,12 @@ export class Empleado {
   @Column({ nullable: false, type: 'boolean' })
   estado: boolean;
 
+  @OneToMany(() => AcreditacionEmpleado, acreditacionEmpleado => acreditacionEmpleado.empleado)
+  acreditacionEmpleados: AcreditacionEmpleado[];
+/*
   @OneToMany(() => Pago, (pago) => pago.empleado)
   pagos: Pago;
-
+*/
   @ManyToOne(() => Area, (area) => area.empleados)
   area: Area;
 

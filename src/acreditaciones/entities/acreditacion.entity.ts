@@ -1,10 +1,14 @@
+import { Area } from 'src/area/entities/area.entity';
 import { AcreditacionEmpleado } from './acreditacionEmpleado.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 
@@ -26,12 +30,20 @@ export class Acreditacion{
   @Column({ name: 'periodo_mes', nullable: true })
   periodoMes: number;
 
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
+  @ManyToOne(() => Area, (area) => area.acreditaciones)
+  @JoinColumn({ name: 'areaID' })
+  area: Area;
+  
+  
+  @OneToMany(() => AcreditacionEmpleado, (acreditacionEmpleado) => acreditacionEmpleado.acreditacion, {
+    cascade: true,
   })
-  public created_at: Date;
+  acreditacionEmpleados: AcreditacionEmpleado[];
 
- //  @OneToMany(() => AcreditacionEmpleado, acreditacionEmpleado => acreditacionEmpleado.acreditacion)
- //  acreditacionEmpleados: AcreditacionEmpleado[];
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  created_at: Date;
+
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updated_at: Date;
+
 }
