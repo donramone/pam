@@ -8,9 +8,16 @@ import { Area } from 'src/area/entities/area.entity';
 import { Empleado } from 'src/empleados/entities/empleado.entity';
 
 @Module({
-   imports: [TypeOrmModule.forFeature([AcreditacionEmpleado, Acreditacion, Area,Empleado])],
- // imports: [TypeOrmModule.forFeature([AcreditacionEmpleado])],
+  imports: [
+    TypeOrmModule.forFeature([
+      AcreditacionEmpleado,
+      Acreditacion,
+      Area,
+      Empleado,
+      
+    ]),
+  ],
   controllers: [AcreditacionesController],
-  providers: [AcreditacionesService]
+  providers: [AcreditacionesService],
 })
 export class AcreditacionesModule {}

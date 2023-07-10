@@ -11,65 +11,37 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Actividad } from './actividad.entity';
+import { Empleado } from './empleado.entity';
 
 @Entity()
-export class Empleado {
+export class Actividad {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @Column({ type: 'varchar', length: 120, nullable: true  })
-  nombre: string;
-
-  @Column({ type: 'varchar', length: 8, nullable: true  })
-  dni: string;
-/*
- 
-
-  @Column({ type: 'varchar', length: 11, nullable: true  })
-  cuil?: string;
-
-  @Column({ type: 'timestamp', name: 'fecha_nacimiento', nullable: true  })
-  fechaNacimiento?: Date;
-
-  @Column({ type: 'varchar', length: 180, nullable: true  })
-  direccion?: string;
-
-  @Column({ type: 'varchar', length: 12, nullable: true })
-  telefono?: string;
-
-  @Column({ type: 'varchar', length: 50, nullable: true })
-  email?: string;
-*/
-  @OneToOne(() => Actividad, actividad => actividad.empleado)
-  actividad: Actividad;
-
-  
-/*
   @Column({
     type: 'varchar',
-    length: 75,
     nullable: true,
-    default: 'No especifica',
   })
   ocupacion: string;
 
   @Column({ nullable: false, type: 'float', default: 0.0 })
   salario: number;
-
+/*
   @Column({ nullable: false, type: 'boolean' })
   estado: boolean;
+*/
+  @OneToOne(() => Empleado, (empleado) => empleado.actividad)
+  @JoinColumn()
+  empleado: Empleado;
 
+  /*
   @OneToMany(() => AcreditacionEmpleado, acreditacionEmpleado => acreditacionEmpleado.empleado)
   acreditacionEmpleados: AcreditacionEmpleado[];
-
-  @ManyToOne(() => Area, (area) => area.empleados)
-  area: Area;
-
-
 */
-/*
 
+  // @ManyToOne(() => Area, (area) => area.empleados)
+  // area: Area;
+  /*
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
@@ -82,6 +54,5 @@ export class Empleado {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   public updated_at: Date;
-
   */
 }

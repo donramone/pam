@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Actividad } from 'src/empleados/entities/actividad.entity';
 // @Entity('Areas')
 @Entity()
 export class Area {
@@ -21,8 +22,16 @@ export class Area {
   @OneToMany(() => Acreditacion, (acreditacion) => acreditacion.area)
   acreditaciones: Acreditacion[];
 
-  @OneToMany(() => Empleado, (empleado) => empleado.area)
-  empleados: Empleado;
+ // @OneToMany(() => EmpleadoDetalleTrabajo, (empleado) => empleado.area)
+ // empleados: EmpleadoDetalleTrabajo;
+
+ // EmpleadoDetalleTrabajo
+
+
+ 
+//  @OneToMany(() => Empleado, (empleado) => empleado.area)
+//  empleados: Empleado;
+
 /*
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;

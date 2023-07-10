@@ -15,10 +15,10 @@ import { AcreditacionesModule } from './acreditaciones/acreditaciones.module';
       port: 3306,
       username: 'root',
       password: 'admin',
-      database: 'pam_dev',
+      database: 'pam_dev2',
       entities: [__dirname + './**/**/*entity{.ts,.js}'],
       autoLoadEntities: true,
-      synchronize: false,
+      synchronize: true, // VOLVER A PONER EN FALSE!
     }),
     AcreditacionesModule,
     AreaModule,

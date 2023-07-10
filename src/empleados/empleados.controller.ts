@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { EmpleadosService } from './empleados.service';
 import { CreateEmpleadoDto } from './dto/create-empleado.dto';
-import { UpdateEmpleadoDto } from './dto/update-empleado.dto';
+import { UpdateEmpleadoDTO } from './dto/update-empleado.dto';
 
 @Controller('empleados')
 export class EmpleadosController {
@@ -20,14 +20,15 @@ export class EmpleadosController {
   @Patch(':id')
   update(
     @Param('id') id: number,
-    @Body() updateEmpleadoDto: UpdateEmpleadoDto,
+    @Body() updateEmpleadoDto: UpdateEmpleadoDTO,
   ) {
     return this.empleadosService.update(id, updateEmpleadoDto);
   }
   @Post()
-  create(@Body() createEmpleadoDto: CreateEmpleadoDto) {
-    console.log(createEmpleadoDto);
-    return this.empleadosService.create(createEmpleadoDto);
+  create(@Body() createEmpleadoDto: any) {
+  //  return this.empleadosService.create(createEmpleadoDto);
+
+    return this.empleadosService.crear(createEmpleadoDto);
   }
 
   @Get(':id')
