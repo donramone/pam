@@ -1,14 +1,12 @@
-import { AcreditacionEmpleado } from 'src/acreditaciones/entities/acreditacionEmpleado.entity';
 import { Area } from '../../area/entities/area.entity';
 import {
   Column,
-  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Empleado } from './empleado.entity';
@@ -26,21 +24,17 @@ export class Actividad {
 
   @Column({ nullable: false, type: 'float', default: 0.0 })
   salario: number;
-/*
-  @Column({ nullable: false, type: 'boolean' })
+
+  @Column({ nullable: false, type: 'boolean', default:true })
   estado: boolean;
-*/
-  @OneToOne(() => Empleado, (empleado) => empleado.actividad)
+
+  @OneToOne(() => Empleado, (empleado) => empleado.actividad )
   @JoinColumn()
   empleado: Empleado;
 
-  /*
-  @OneToMany(() => AcreditacionEmpleado, acreditacionEmpleado => acreditacionEmpleado.empleado)
-  acreditacionEmpleados: AcreditacionEmpleado[];
-*/
+  @ManyToOne(() => Area, area => area.empleados)
+  area: Area;
 
-  // @ManyToOne(() => Area, (area) => area.empleados)
-  // area: Area;
   /*
   @CreateDateColumn({
     type: 'timestamp',

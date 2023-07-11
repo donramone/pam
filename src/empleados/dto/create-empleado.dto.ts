@@ -8,23 +8,28 @@ import { TrabajoDTO } from './trabajo.dto';
 import { Type } from 'class-transformer';
 
 export class CreateEmpleadoDto {
-  //   @IsString()
-  //   @IsNotEmpty()
   id?: number;
-  nombre: string;
-
-  //    @IsString()
-  //    @IsNotEmpty()
-  trabajo: {
-    ocupacion: string;
-    salario: number;
-    estado: boolean;
-  };
+   @IsString()
+   @IsNotEmpty()
+   nombre: string;
+   dni: string;
+   cuil: string;
+   fechaNacimiento: string;
+   direccion: string;
+   actividad: {
+     salario: number;
+     ocupacion: string;
+   };
+   area: {
+     id: number;
+     nombre: string;
+   };
+ }
 
   //    @ValidateNested()
   //    @Type(() => TrabajoDTO)
   //    trabajo: TrabajoDTO;
-}
+
 
 /*
   @MinLength(3, { message: 'El nombre debe tener un minimo de 3 caracteres' })

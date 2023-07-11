@@ -18,18 +18,16 @@ export class Empleado {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @Column({ type: 'varchar', length: 120, nullable: true  })
+  @Column({ type: 'varchar', length: 120, nullable: false  })
   nombre: string;
 
-  @Column({ type: 'varchar', length: 8, nullable: true  })
+  @Column({ type: 'varchar', length: 8, nullable: false  })
   dni: string;
-/*
- 
 
-  @Column({ type: 'varchar', length: 11, nullable: true  })
+  @Column({ type: 'varchar', length: 11, nullable: false  })
   cuil?: string;
 
-  @Column({ type: 'timestamp', name: 'fecha_nacimiento', nullable: true  })
+  @Column({ type: 'date', name: 'fecha_nacimiento', nullable: true  })
   fechaNacimiento?: Date;
 
   @Column({ type: 'varchar', length: 180, nullable: true  })
@@ -40,36 +38,12 @@ export class Empleado {
 
   @Column({ type: 'varchar', length: 50, nullable: true })
   email?: string;
-*/
+
+
   @OneToOne(() => Actividad, actividad => actividad.empleado)
   actividad: Actividad;
 
-  
 /*
-  @Column({
-    type: 'varchar',
-    length: 75,
-    nullable: true,
-    default: 'No especifica',
-  })
-  ocupacion: string;
-
-  @Column({ nullable: false, type: 'float', default: 0.0 })
-  salario: number;
-
-  @Column({ nullable: false, type: 'boolean' })
-  estado: boolean;
-
-  @OneToMany(() => AcreditacionEmpleado, acreditacionEmpleado => acreditacionEmpleado.empleado)
-  acreditacionEmpleados: AcreditacionEmpleado[];
-
-  @ManyToOne(() => Area, (area) => area.empleados)
-  area: Area;
-
-
-*/
-/*
-
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',

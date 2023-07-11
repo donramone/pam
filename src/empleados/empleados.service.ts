@@ -5,6 +5,7 @@ import { CreateEmpleadoDto } from './dto/create-empleado.dto';
 import { UpdateEmpleadoDTO } from './dto/update-empleado.dto';
 import { Empleado } from './entities/empleado.entity';
 import { Actividad } from './entities/actividad.entity';
+import { Area } from 'src/area/entities/area.entity';
 
 @Injectable()
 export class EmpleadosService {
@@ -16,17 +17,29 @@ export class EmpleadosService {
     private readonly empleadoactividadRepository: Repository<Actividad>,
   ) {}
 
-  async create(empleadoDto: CreateEmpleadoDto) {
-
-    /*
-
-    const empleado = this.EmpleadoRepository.create(createEmpleadoDto);
-    this.logger.log('El nuevo empleado es');
-    this.logger.log(JSON.stringify(empleado));
-    await this.EmpleadoRepository.save(empleado);
-    return empleado;
-    */
-  }
+  async create(createEmpleadoDto: CreateEmpleadoDto) {
+    const area = new Area();
+    area.id = createEmpleadoDto.area.id;
+    area.nombre = createEmpleadoDto.area.nombre;
+  
+    const empleado = new Empleado();
+    empleado.nombre = createEmpleadoDto.nombre;
+    empleado.dni = createEmpleadoDto.dni;
+    empleado.cuil = createEmpleadoDto.cuil;
+    empleado.fechaNacimiento = new Date(createEmpleadoDto.fechaNacimiento);
+    empleado.direccion = createEmpleadoDto.direccion;
+  
+    const newEmpleado = await this.empleadoRepository.save(empleado);
+  
+    const actividad = new Actividad();
+    actividad.salario = createEmpleadoDto.actividad.salario;
+    actividad.ocupacion = createEmpleadoDto.actividad.ocupacion;
+    actividad.area = area;
+    actividad.empleado = newEmpleado;
+  
+    const newActividad = await this.empleadoactividadRepository.save(actividad);
+    return newEmpleado;
+}
 
   async update(id: number, updateEmpleadoDto: UpdateEmpleadoDTO) {
    
@@ -51,24 +64,7 @@ export class EmpleadosService {
     */
   }
 
-  async crear(body:any){
-    /// Probar no guardar el actividad
 
-    this.logger.log(body.nombre, body.ocupacion);
-    
-    const actividad = new Actividad();
-    actividad.salario = body.salario;
-    actividad.ocupacion = body.ocupacion;
-    const newActividad = this.empleadoactividadRepository.save(actividad);
-    
-    const emp = new Empleado();
-    emp.nombre = body.nombre;
-    emp.dni = body.dni;
-    const newEmp =  this.empleadoRepository.save(emp);
-
-
-
-  }
 
   /*
   async findByDni(dni: string): Promise<Empleado> {
@@ -93,19 +89,19 @@ export class EmpleadosService {
   }
 
   async findByArea(id: string) {
-    const empleados = await this.empleadoRepository.createQueryBuilder(
-      'empleado',
-    )
-      .where('area.id = :id', { id: id }) // .where({ id: id})
+    const empleados = await this.empleadoRepository
+      .createQueryBuilder('empleado')
+      .innerJoinAndSelect('empleado.actividad', 'actividad')
+      .leftJoinAndSelect('actividad.area', 'area', 'area.id = :id', { id })
       .select([
         'empleado.id',
         'empleado.nombre',
         'empleado.dni',
-        'empleado.salario',
+        'actividad.salario',
+        'actividad.ocupacion',
         'area.id',
         'area.nombre',
       ])
-      .leftJoin('empleado.area', 'area')
       .getMany();
     return empleados;
   }

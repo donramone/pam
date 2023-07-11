@@ -22,6 +22,10 @@ export class Area {
   @OneToMany(() => Acreditacion, (acreditacion) => acreditacion.area)
   acreditaciones: Acreditacion[];
 
+  
+  @OneToMany(() => Actividad, actividad => actividad.area)
+  empleados: Actividad[];
+
  // @OneToMany(() => EmpleadoDetalleTrabajo, (empleado) => empleado.area)
  // empleados: EmpleadoDetalleTrabajo;
 

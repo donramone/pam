@@ -26,9 +26,7 @@ export class EmpleadosController {
   }
   @Post()
   create(@Body() createEmpleadoDto: any) {
-  //  return this.empleadosService.create(createEmpleadoDto);
-
-    return this.empleadosService.crear(createEmpleadoDto);
+    return this.empleadosService.create(createEmpleadoDto);
   }
 
   @Get(':id')
