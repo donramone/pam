@@ -8,20 +8,17 @@ import {
   Delete,
 } from '@nestjs/common';
 import { AcreditacionesService } from './acreditaciones.service';
-import { CreateAcreditacionesDto } from './dto/create-acreditaciones.dto';
-import { CreateAcreditacionDTO } from './dto/CreateAcreditacion.dto';
+import { CreateAcreditacionDTO } from './dto/create -acreditaciones.dto';
 
 import { UpdateAcreditacioneDto } from './dto/update-acreditaciones.dto';
-import { CreateAcreditacionesEmpleadoDto } from './dto/create-acreditaciones-empleado.dto';
 
 @Controller('acreditaciones')
 export class AcreditacionesController {
   constructor(private readonly acreditacionesService: AcreditacionesService) {}
 
   @Post()
-  create(@Body() dto: CreateAcreditacionDTO ) {
-  //  return this.acreditacionesService.create(createAcreditacionesDto, createAcreditacionesEmpleadoDto);
-  return this.acreditacionesService.createAcreditacion(dto);
+  create(@Body() dto: CreateAcreditacionDTO) {
+    return this.acreditacionesService.createAcreditacion(dto);
   }
 
   @Get()
@@ -36,7 +33,7 @@ export class AcreditacionesController {
 
   @Get('area/:areaId')
   findByArea(@Param('areaId') id: number) {
-    return this.acreditacionesService.findByArea(id)
+    return this.acreditacionesService.findByArea(id);
   }
 
   @Get('nro/:nro')
@@ -49,7 +46,7 @@ export class AcreditacionesController {
     @Param('id') id: string,
     @Body() updateAcreditacioneDto: UpdateAcreditacioneDto,
   ) {
-   // return this.acreditacionesService.update(+id, updateAcreditacioneDto);
+    // return this.acreditacionesService.update(+id, updateAcreditacioneDto);
   }
 
   @Delete(':id')

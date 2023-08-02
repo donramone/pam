@@ -18,33 +18,13 @@ export class EmpleadosService {
   ) {}
 
   async create(createEmpleadoDto: CreateEmpleadoDto) {
-    const area = new Area();
-    area.id = createEmpleadoDto.area.id;
-    area.nombre = createEmpleadoDto.area.nombre;
-  
-    const empleado = new Empleado();
-    empleado.nombre = createEmpleadoDto.nombre;
-    empleado.dni = createEmpleadoDto.dni;
-    empleado.cuil = createEmpleadoDto.cuil;
-    empleado.fechaNacimiento = new Date(createEmpleadoDto.fechaNacimiento);
-    empleado.direccion = createEmpleadoDto.direccion;
-  
-    const newEmpleado = await this.empleadoRepository.save(empleado);
-  
-    const actividad = new Actividad();
-    actividad.salario = createEmpleadoDto.actividad.salario;
-    actividad.ocupacion = createEmpleadoDto.actividad.ocupacion;
-    actividad.area = area;
-    actividad.empleado = newEmpleado;
-  
-    const newActividad = await this.empleadoactividadRepository.save(actividad);
-    return newEmpleado;
-}
+    const empleado = await this.saveEmpleado(createEmpleadoDto);
+    await this.saveActividad(empleado.id, createEmpleadoDto.actividad);
+  }
 
   async update(id: number, updateEmpleadoDto: UpdateEmpleadoDTO) {
-   
     this.logger.log(updateEmpleadoDto);
-   /*
+    /*
     const empleado = this.empleadoRepository.create(updateEmpleadoDto);
     await this.empleadoRepository.update({ id }, empleado);
     return await this.empleadoRepository.findOne({ id });
@@ -56,7 +36,7 @@ export class EmpleadosService {
   }
   async findAll() {
     this.logger.log('Fin em ALL empleado service!');
-   return await this.empleadoRepository.find();
+    return await this.empleadoRepository.find();
     /*
     return await this.empleadoRepository.find({
       relations: ['area'],
@@ -64,7 +44,39 @@ export class EmpleadosService {
     */
   }
 
+  async saveEmpleado(createEmpleadoDto: any) {
+    const empleado = new Empleado();
+    empleado.nombre = createEmpleadoDto.nombre;
+    empleado.dni = createEmpleadoDto.dni;
+    empleado.cuil = createEmpleadoDto.cuil;
+    empleado.fechaNacimiento = new Date(createEmpleadoDto.fechaNacimiento);
+    empleado.direccion = createEmpleadoDto.direccion;
 
+    return await this.empleadoRepository.save(empleado);
+  }
+
+  async saveActividad(empleadoId: number, createEmpleadoDto: any) {
+
+    this.logger.log(createEmpleadoDto)
+ 
+    const empleado = await this.empleadoRepository.findOne(empleadoId);
+    if (!empleado) {
+      this.logger.log('No se encontro empleado con el id: ', empleadoId);
+      return;
+    }
+
+    const area = new Area();
+    area.id = createEmpleadoDto.area.id;
+    area.nombre = createEmpleadoDto.area.nombre;
+
+    const actividad = new Actividad();
+    actividad.salario = createEmpleadoDto.salario;
+    actividad.ocupacion = createEmpleadoDto.ocupacion;
+    actividad.area = area;
+    actividad.empleado = empleado;
+
+    return await this.empleadoactividadRepository.save(actividad);
+  }
 
   /*
   async findByDni(dni: string): Promise<Empleado> {
@@ -93,6 +105,7 @@ export class EmpleadosService {
       .createQueryBuilder('empleado')
       .innerJoinAndSelect('empleado.actividad', 'actividad')
       .leftJoinAndSelect('actividad.area', 'area', 'area.id = :id', { id })
+      .where('area.id = :id', { id })
       .select([
         'empleado.id',
         'empleado.nombre',

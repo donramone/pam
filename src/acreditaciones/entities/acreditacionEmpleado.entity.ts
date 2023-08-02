@@ -1,4 +1,4 @@
-import { Acreditacion } from './acreditacion.entity';
+
 import {
   Column,
   CreateDateColumn,
@@ -8,7 +8,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Actividad } from 'src/empleados/entities/actividad.entity';
+import { Acreditacion } from './acreditacion.entity';
+import { Empleado } from 'src/empleados/entities/empleado.entity';
 
 
 
@@ -23,21 +24,28 @@ export class AcreditacionEmpleado {
   @ManyToOne(() => Acreditacion, acreditacion => acreditacion.acreditacionEmpleados)
   @JoinColumn({ name: 'acreditacionID' })
   acreditacion: Acreditacion;
-/*
-  @ManyToOne(() => EmpleadoDetalleTrabajo, empleado => empleado.acreditacionEmpleados)
+
+  @ManyToOne(() => Empleado, empleado => empleado.acreditacionEmpleados,{ nullable: false })
   @JoinColumn({ name: 'empleadoID' })
-  empleado: EmpleadoDetalleTrabajo
-*/
-  //@ManyToOne(() => Empleado, empleado => empleado.acreditacionEmpleados)
-  //@JoinColumn({ name: 'empleadoID' })
-  //empleado: Empleado
+  empleado: Empleado
 
 
-  /*
-  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  created_at: Date;
+  @Column({ nullable: false })
+  empleadoID: number; 
+  
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+  })
+  public created_at: Date;
 
-  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  updated_at: Date;
-  */
+  @UpdateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
+  })
+  public updated_at: Date;
 }
+
+
+

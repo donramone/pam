@@ -11,10 +11,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-
-
 @Entity({ name: 'acreditacion' })
-export class Acreditacion{
+export class Acreditacion {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -33,18 +31,26 @@ export class Acreditacion{
   @ManyToOne(() => Area, (area) => area.acreditaciones)
   @JoinColumn({ name: 'areaID' })
   area: Area;
-  
-  
-  @OneToMany(() => AcreditacionEmpleado, (acreditacionEmpleado) => acreditacionEmpleado.acreditacion, {
-    cascade: true,
-  })
+
+  @OneToMany(
+    () => AcreditacionEmpleado,
+    (acreditacionEmpleado) => acreditacionEmpleado.acreditacion,
+    {
+      cascade: true,
+    },
+  )
   acreditacionEmpleados: AcreditacionEmpleado[];
+  
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+  })
+  public created_at: Date;
 
-  /*
-  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  created_at: Date;
-
-  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  updated_at: Date;
-*/
+  @UpdateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
+  })
+  public updated_at: Date;
 }

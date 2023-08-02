@@ -1,13 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CreateAcreditacionesDto } from './dto/create-acreditaciones.dto';
 import { UpdateAcreditacioneDto } from './dto/update-acreditaciones.dto';
 import { Repository } from 'typeorm/repository/Repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AcreditacionEmpleado } from './entities/acreditacionEmpleado.entity';
 import { Acreditacion } from './entities/acreditacion.entity';
-import { CreateAcreditacionesEmpleadoDto } from './dto/create-acreditaciones-empleado.dto';
-import { CreateAcreditacionDTO } from './dto/CreateAcreditacion.dto';
-import { Area } from 'src/area/entities/area.entity';
+import { CreateAcreditacionDTO } from './dto/create -acreditaciones.dto';
 
 @Injectable()
 export class AcreditacionesService {
@@ -16,33 +13,48 @@ export class AcreditacionesService {
     @InjectRepository(Acreditacion)
     private readonly acreditacionRepository: Repository<Acreditacion>,
     @InjectRepository(AcreditacionEmpleado)
-    private readonly acreditacionEmpleadoRepository: Repository<AcreditacionEmpleado>
+    private readonly acreditacionEmpleadoRepository: Repository<AcreditacionEmpleado>,
   ) {}
 
   async createAcreditacion(dto: CreateAcreditacionDTO): Promise<Acreditacion> {
-    this.logger.log('EN el service va  aguardar', dto)
+    this.logger.log('createAcreditacion - En el service va  aguardar', dto);
 
-    const acreditacion = this.acreditacionRepository.create(dto);
-    const savedAcreditacion = await this.acreditacionRepository.save(acreditacion);
-    return acreditacion
-    //const acreditacionId = savedAcreditacion.id;
+    const newAcreditacion = this.acreditacionRepository.create(dto);
+    const savedAcreditacion = await this.acreditacionRepository.save(
+      newAcreditacion,
+    );
 
-      // Asignar el id de la Acreditacion a cada AcreditacionEmpleado
+    for (const acreditacionEmpleadoData of dto.acreditacionEmpleadosData ) {
+      const acreditacionEmpleado = new AcreditacionEmpleado();
+      acreditacionEmpleado.acreditacion = savedAcreditacion;
+      acreditacionEmpleado.empleadoID = acreditacionEmpleadoData.empleadoID;
+      acreditacionEmpleado.salario = acreditacionEmpleadoData.salario;
+     // acreditacionEmpleadoData.acreditacionID = savedAcreditacion.id;
+      await this.acreditacionEmpleadoRepository.save(acreditacionEmpleado);
+    }
+     return savedAcreditacion;
+
+    // Asignar el id de la Acreditacion a cada AcreditacionEmpleado
 /*
-  for (const acreditacionEmpleadoData of dto.acreditacionEmpleadosData) {
-    const acreditacionEmpleado = this.acreditacionEmpleadoRepository.create(acreditacionEmpleadoData);
-    acreditacionEmpleado.acreditacionID = acreditacionId;
-    await this.acreditacionEmpleadoRepository.save(acreditacionEmpleado);
-  }
-*/
-  return savedAcreditacion;
+    const acreditacionEmpleados = dto.acreditacionEmpleados.map((empleadoData) => {
+      const acreditacionEmpleado = new AcreditacionEmpleado();
+      acreditacionEmpleado.acreditacion = savedAcreditacion;
+      acreditacionEmpleado.id = empleadoData.empleadoID;
+      acreditacionEmpleado.salario = empleadoData.salario;
+      return acreditacionEmpleado;
+    });
 
-    return this.acreditacionRepository.save(acreditacion);
+         const acreditacionEmpleado = this.acreditacionEmpleadoRepository.create(
+        acreditacionEmpleadoData,
+      );
+    return savedAcreditacion;
+*/
+
 
   }
 
   async create(dto: CreateAcreditacionDTO) {
-/*
+    /*
     const { totalImporte, totalEmpleados, periodoMes, acreditacionEmpleados, area } = dto;
 
     const acreditacion = new Acreditacion();
@@ -93,9 +105,8 @@ export class AcreditacionesService {
   }
 
   async findByArea(id: number) {
-    const acreditacion = await this.acreditacionRepository.createQueryBuilder(
-      'acreditacion',
-    ) // 'acreditacion' es el alias de la tabla
+    const acreditacion = await this.acreditacionRepository
+      .createQueryBuilder('acreditacion') // 'acreditacion' es el alias de la tabla
       .where('acreditacion.areaID = :areaID', { areaID: id }) // Comparar el campo 'areaID' con el valor proporcionado
       //  .where('area.id = :id', { id: id }) // .where({ id: id})
       .getMany();
@@ -108,30 +119,28 @@ export class AcreditacionesService {
   }
 
   async getEmpleadosByNroAcreditacion(nroAcreditacion: number) {
-    const acreditaciones =
-      await this.acreditacionRepository.createQueryBuilder('acreditacion')
-        .leftJoinAndSelect(
-          'acreditacion.acreditacionEmpleados',
-          'acreditacion_empleado',
-        )
-        .leftJoinAndSelect('acreditacion.area', 'area')
-        .leftJoinAndSelect('acreditacion_empleado.empleado', 'empleado')
-
-        .select([
-          'acreditacion.id',
-          'acreditacion.areaID',
-          'area.nombre',
-          'acreditacion.totalImporte',
-          'acreditacion.totalEmpleados',
-          'acreditacion.periodoMes',
-          'acreditacion.created_at',
-          'acreditacion_empleado.salario',
-          'empleado.id',
-          'empleado.nombre',
-          'empleado.dni',
-        ])
-        .where('acreditacion.id = :nroAcreditacion', { nroAcreditacion })
-        .getOne();
+    const acreditaciones = await this.acreditacionRepository
+      .createQueryBuilder('acreditacion')
+      .leftJoinAndSelect(
+        'acreditacion.acreditacionEmpleados',
+        'acreditacion_empleado',
+      )
+      .leftJoinAndSelect('acreditacion.area', 'area')
+      .leftJoinAndSelect('acreditacion_empleado.empleado', 'empleado')
+      .select([
+        'acreditacion.id',
+        'acreditacion.areaID',
+        'area.nombre',
+        'acreditacion.totalImporte',
+        'acreditacion.totalEmpleados',
+        'acreditacion.periodoMes',
+        'acreditacion_empleado.salario',
+        'empleado.id',
+        'empleado.nombre',
+        'empleado.dni',
+      ])
+      .where('acreditacion.id = :nroAcreditacion', { nroAcreditacion })
+      .getOne();
 
     return acreditaciones;
 

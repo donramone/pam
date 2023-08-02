@@ -1,5 +1,5 @@
 import { AcreditacionEmpleado } from 'src/acreditaciones/entities/acreditacionEmpleado.entity';
-import { Area } from '../../area/entities/area.entity';
+import { Actividad } from './actividad.entity';
 import {
   Column,
   CreateDateColumn,
@@ -11,7 +11,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Actividad } from './actividad.entity';
+
 
 @Entity()
 export class Empleado {
@@ -39,10 +39,14 @@ export class Empleado {
   @Column({ type: 'varchar', length: 50, nullable: true })
   email?: string;
 
-
   @OneToOne(() => Actividad, actividad => actividad.empleado)
   actividad: Actividad;
 
+  
+  @OneToMany(() => AcreditacionEmpleado, acreditacionEmpleado => acreditacionEmpleado.empleado)
+  acreditacionEmpleados: AcreditacionEmpleado[];
+  
+}
 /*
   @CreateDateColumn({
     type: 'timestamp',
@@ -58,4 +62,4 @@ export class Empleado {
   public updated_at: Date;
 
   */
-}
+
