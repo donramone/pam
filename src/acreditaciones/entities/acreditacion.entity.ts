@@ -1,4 +1,4 @@
-import { Area } from 'src/area/entities/area.entity';
+import { Area } from '../../area/entities/area.entity';
 import { AcreditacionEmpleado } from './acreditacionEmpleado.entity';
 import {
   Column,

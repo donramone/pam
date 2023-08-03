@@ -7,6 +7,7 @@ import { AreaModule } from './area/area.module';
 import { EmpleadosModule } from './empleados/empleados.module';
 import { PagosModule } from './pagos/pagos.module';
 import { AcreditacionesModule } from './acreditaciones/acreditaciones.module';
+import { DataSourceConfig } from './config/data.source';
 
 
 @Module({
@@ -14,17 +15,7 @@ import { AcreditacionesModule } from './acreditaciones/acreditaciones.module';
     ConfigModule.forRoot({
       isGlobal:true
     }),
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DATABASE,
-      entities: [__dirname + './**/**/*entity{.ts,.js}'],
-      autoLoadEntities: true,
-      synchronize: true, // VOLVER A PONER EN FALSE!
-    }),
+    TypeOrmModule.forRoot({...DataSourceConfig}),
     AcreditacionesModule,
     AreaModule,
     EmpleadosModule,

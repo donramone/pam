@@ -1,4 +1,4 @@
-import { AcreditacionEmpleado } from 'src/acreditaciones/entities/acreditacionEmpleado.entity';
+import { AcreditacionEmpleado } from '../../acreditaciones/entities/acreditacionEmpleado.entity';
 import { Actividad } from './actividad.entity';
 import {
   Column,

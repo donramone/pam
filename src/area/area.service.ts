@@ -27,13 +27,13 @@ export class AreaService {
   async findOne(id: number) {
     console.log('findone area service');
     
-    const area = await this.AreaRepository.findOne(id);
+    const area = await this.AreaRepository.findOneBy({id});
     return area;
   }
 
   async update(id: number, updateAreaDto: UpdateAreaDto) {
     await this.AreaRepository.update({ id }, updateAreaDto);
-    return await this.AreaRepository.findOne({ id });
+    return await this.AreaRepository.findOneBy({ id });
 
   }
 

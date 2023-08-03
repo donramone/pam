@@ -1,6 +1,7 @@
-import { Acreditacion } from 'src/acreditaciones/entities/acreditacion.entity';
-import { Empleado } from '../../empleados/entities/empleado.entity';
-//import { Empleado } from 'src/empleados/entities/empleado.entity';
+import { Acreditacion } from '../../acreditaciones/entities/acreditacion.entity';
+// import { Empleado } from '../../empleados/entities/empleado.entity';
+import { Actividad } from '../../empleados/entities/actividad.entity';
+
 import {
   Column,
   CreateDateColumn,
@@ -9,7 +10,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Actividad } from 'src/empleados/entities/actividad.entity';
+
 // @Entity('Areas')
 @Entity()
 export class Area {

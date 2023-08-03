@@ -59,7 +59,7 @@ export class EmpleadosService {
 
     this.logger.log(createEmpleadoDto)
  
-    const empleado = await this.empleadoRepository.findOne(empleadoId);
+    const empleado = await this.empleadoRepository.findOneBy( {id: empleadoId} );
     if (!empleado) {
       this.logger.log('No se encontro empleado con el id: ', empleadoId);
       return;
@@ -91,13 +91,17 @@ export class EmpleadosService {
     return empleado;
   }
 */
+
   async findById(id: string): Promise<Empleado> {
+    /*
     const empleado = await this.empleadoRepository.findOne(id, {
       relations: ['area'],
     });
     console.log('empleado findByid');
     console.log(empleado);
     return empleado;
+    */
+   return null
   }
 
   async findByArea(id: string) {
