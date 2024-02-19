@@ -1,7 +1,9 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateEmpleadoDto } from './create-empleado.dto';
 
-export class UpdateEmpleadoDTO extends PartialType(CreateEmpleadoDto) {}
+export class UpdateEmpleadoDTO extends PartialType(CreateEmpleadoDto) {
+  id: number;
+}
 
 /*
 export class UpdateEmpleadoDto extends PartialType(CreateEmpleadoDto) {
@@ -12,7 +14,7 @@ export class UpdateEmpleadoDto extends PartialType(CreateEmpleadoDto) {
   telefono: string;
   email: string;
   ocupacion: string;
-  salario: number;
+  importe: number;
   // Si solo se llama area me da error??
   areaId: number;
 }

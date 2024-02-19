@@ -22,8 +22,7 @@
     "typeorm": "typeorm-ts-node-esm",
     "orm:init": "typeorm-ts-node-esm -d ./src/config/data.source.ts",
     "m:gen": "npm run orm:init migration:generate",
-    "migration:g": "ts-node node_modules/.bin/typeorm migration:generate -d ./src/config/data.source.ts --name",
-    "migration:revert": "ts-node node_modules/.bin/typeorm migration:revert"
+    "m:run": "npm run orm:init migration:run"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",

@@ -17,35 +17,34 @@ export class EmpleadosController {
   logger = new Logger();
   constructor(private readonly empleadosService: EmpleadosService) {}
 
+    // cambiar luego por Save
   @Patch(':id')
   update(
     @Param('id') id: number,
-    @Body() updateEmpleadoDto: UpdateEmpleadoDTO,
+    @Body() updateEmpleadoDto: CreateEmpleadoDto,
   ) {
-    return this.empleadosService.update(id, updateEmpleadoDto);
+    return this.empleadosService.create(updateEmpleadoDto);
+  //  return this.empleadosService.update(id, updateEmpleadoDto);
   }
   @Post()
-  create(@Body() createEmpleadoDto: any) {
+  create(@Body() createEmpleadoDto: CreateEmpleadoDto) {
     return this.empleadosService.create(createEmpleadoDto);
   }
 
-  @Get(':id')
-  findById(@Param('id') id: string) {
+  @Get('id/:id')
+  findById(@Param('id') id: number) {
     return this.empleadosService.findById(id);
   }
+  
+  @Get('dni/:dni')
+  findByDni(@Param('dni') dni: string) {
+    return this.empleadosService.findByDni(dni);
+  }
+  
   @Get('area/:areaId')
   findByArea(@Param('areaId') id: string) {
     return this.empleadosService.findByArea(id);
   }
-  /*
-/employees?dept='HR'
-/employee?id=1234&dept='HR'
-/comapny/:companyId    /staff/:staffId
-  @Get('area/:id')
-  findByArea(@Param('id') id: string) {
-    return this.empleadosService.findByArea(id);
-  }
-*/
   @Get()
   findAll() {
     return this.empleadosService.findAll();
@@ -53,6 +52,6 @@ export class EmpleadosController {
 
   @Delete(':id')
   remove(@Param('id') id: number) {
-    return this.empleadosService.remove(id);
+   // return this.empleadosService.remove(id);
   }
 }

@@ -1,5 +1,4 @@
 import { Acreditacion } from '../../acreditaciones/entities/acreditacion.entity';
-// import { Empleado } from '../../empleados/entities/empleado.entity';
 import { Actividad } from '../../empleados/entities/actividad.entity';
 
 import {
@@ -21,27 +20,26 @@ export class Area {
   nombre: string;
 
   @OneToMany(() => Acreditacion, (acreditacion) => acreditacion.area)
-  acreditaciones: Acreditacion[];
+  acreditaciones?: Acreditacion[];
 
   
   @OneToMany(() => Actividad, actividad => actividad.area)
-  empleados: Actividad[];
+  actividad?: Actividad[];
 
- // @OneToMany(() => EmpleadoDetalleTrabajo, (empleado) => empleado.area)
- // empleados: EmpleadoDetalleTrabajo;
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+  })
+  public created_at?: Date;
 
- // EmpleadoDetalleTrabajo
+  @UpdateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
+  })
+  public updated_at?: Date;
+  
+  @Column({ default: true })
+  is_active?: boolean;
 
-
- 
-//  @OneToMany(() => Empleado, (empleado) => empleado.area)
-//  empleados: Empleado;
-
-/*
-  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  created_at: Date;
-
-  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  updated_at: Date;
-  */
 }

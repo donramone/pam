@@ -17,7 +17,9 @@ export const DataSourceConfig: DataSourceOptions  = {
     database: configService.get('DB_DATABASE'),
     entities: [__dirname + '/../**/*.entity{.ts,.js}'],
     migrations: [__dirname + "/../migrations/*{.ts,.js}"], 
-    synchronize: false, // True destruye datos
+    synchronize: true, // True destruye datos
+    logging: false, // Habilitar logs de SQL
+    logger: "advanced-console", // Usar logger avanzado
 }
 
 export const AppDS = new DataSource(DataSourceConfig);

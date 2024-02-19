@@ -3,7 +3,7 @@ import { CreateAcreditacionesEmpleadoDto } from './create-acreditaciones-emplead
 export class CreateAcreditacionDTO {
     totalImporte: number;
     totalEmpleados: number;
-    periodoMes: number;
-    acreditacionEmpleadosData: CreateAcreditacionesEmpleadoDto [];
+    periodo: string;
+    acreditacionEmpleados: CreateAcreditacionesEmpleadoDto [];
     area: CreateAreaDto;
   }

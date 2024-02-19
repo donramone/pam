@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateEmpleadoDto } from './dto/create-empleado.dto';
@@ -6,6 +6,7 @@ import { UpdateEmpleadoDTO } from './dto/update-empleado.dto';
 import { Empleado } from './entities/empleado.entity';
 import { Actividad } from './entities/actividad.entity';
 import { Area } from 'src/area/entities/area.entity';
+import { log } from 'console';
 
 @Injectable()
 export class EmpleadosService {
@@ -14,97 +15,33 @@ export class EmpleadosService {
     @InjectRepository(Empleado)
     private readonly empleadoRepository: Repository<Empleado>,
     @InjectRepository(Actividad)
-    private readonly empleadoactividadRepository: Repository<Actividad>,
+    private readonly actividadRepository: Repository<Actividad>,
   ) {}
 
-  async create(createEmpleadoDto: CreateEmpleadoDto) {
-    const empleado = await this.saveEmpleado(createEmpleadoDto);
-    await this.saveActividad(empleado.id, createEmpleadoDto.actividad);
-  }
-
-  async update(id: number, updateEmpleadoDto: UpdateEmpleadoDTO) {
-    this.logger.log(updateEmpleadoDto);
-    /*
-    const empleado = this.empleadoRepository.create(updateEmpleadoDto);
-    await this.empleadoRepository.update({ id }, empleado);
-    return await this.empleadoRepository.findOne({ id });
-    */
-  }
-  async remove(id: number) {
-    return await this.empleadoRepository.delete({ id });
-    // armar control para ver si tiene que devolver true o false
-  }
   async findAll() {
-    this.logger.log('Fin em ALL empleado service!');
-    return await this.empleadoRepository.find();
-    /*
     return await this.empleadoRepository.find({
-      relations: ['area'],
+      relations: ['actividad', 'actividad.area'],
     });
-    */
   }
 
-  async saveEmpleado(createEmpleadoDto: any) {
-    const empleado = new Empleado();
-    empleado.nombre = createEmpleadoDto.nombre;
-    empleado.dni = createEmpleadoDto.dni;
-    empleado.cuil = createEmpleadoDto.cuil;
-    empleado.fechaNacimiento = new Date(createEmpleadoDto.fechaNacimiento);
-    empleado.direccion = createEmpleadoDto.direccion;
-
-    return await this.empleadoRepository.save(empleado);
-  }
-
-  async saveActividad(empleadoId: number, createEmpleadoDto: any) {
-
-    this.logger.log(createEmpleadoDto)
- 
-    const empleado = await this.empleadoRepository.findOneBy( {id: empleadoId} );
-    if (!empleado) {
-      this.logger.log('No se encontro empleado con el id: ', empleadoId);
-      return;
-    }
-
-    const area = new Area();
-    area.id = createEmpleadoDto.area.id;
-    area.nombre = createEmpleadoDto.area.nombre;
-
-    const actividad = new Actividad();
-    actividad.salario = createEmpleadoDto.salario;
-    actividad.ocupacion = createEmpleadoDto.ocupacion;
-    actividad.area = area;
-    actividad.empleado = empleado;
-
-    return await this.empleadoactividadRepository.save(actividad);
-  }
-
-  /*
   async findByDni(dni: string): Promise<Empleado> {
-    console.log('finByDNI');
-
-    const empleado = await this.EmpleadoRepository.findOne(
-      { dni: dni },
-      {
-        relations: ['area'],
-      },
-    );
-    return empleado;
-  }
-*/
-
-  async findById(id: string): Promise<Empleado> {
-    /*
-    const empleado = await this.empleadoRepository.findOne(id, {
-      relations: ['area'],
+      const empleado = await this.empleadoRepository.findOne({
+      where: { dni: dni },
+      relations: ['actividad', 'actividad.area'],
     });
-    console.log('empleado findByid');
-    console.log(empleado);
     return empleado;
-    */
-   return null
   }
 
-  async findByArea(id: string) {
+  async findById(id: number): Promise<Empleado> {
+    this.logger.log('finByID');
+    const empleado = await this.empleadoRepository.findOne({
+      where: { id: id }, // Condición de búsqueda
+      relations: ['actividad'], // Cargar la relación actividad
+    });
+    return empleado;
+  }
+
+  async findByArea(id: string): Promise<Empleado[]> {
     const empleados = await this.empleadoRepository
       .createQueryBuilder('empleado')
       .innerJoinAndSelect('empleado.actividad', 'actividad')
@@ -114,12 +51,89 @@ export class EmpleadosService {
         'empleado.id',
         'empleado.nombre',
         'empleado.dni',
-        'actividad.salario',
+        'empleado.cuil',
+        'empleado.direccion',
+        'actividad.id',
+        'actividad.importe',
         'actividad.ocupacion',
+        'actividad.nro_convenio',
+        'actividad.nro_cuenta',
         'area.id',
         'area.nombre',
       ])
       .getMany();
     return empleados;
+  }
+
+  // cambiar luego por Save
+  async create(createEmpleadoDto: CreateEmpleadoDto) {
+    const empleado = await this.guardarEmpleado(createEmpleadoDto);
+    const actividad = await this.guardarctividad(empleado, createEmpleadoDto);
+    log(empleado);
+    log(actividad);
+    return empleado;
+  }
+
+  async guardarEmpleado(
+    createEmpleadoDto: CreateEmpleadoDto,
+  ): Promise<Empleado> {
+    if (!createEmpleadoDto.id) {
+      const empleadoNuevo = new Empleado();
+      empleadoNuevo.nombre = createEmpleadoDto.nombre;
+      empleadoNuevo.dni = createEmpleadoDto.dni;
+      empleadoNuevo.cuil = createEmpleadoDto.cuil;
+      empleadoNuevo.fechaNacimiento = new Date(
+        createEmpleadoDto.fechaNacimiento,
+      );
+      empleadoNuevo.direccion = createEmpleadoDto.direccion;
+      empleadoNuevo.telefono = createEmpleadoDto.telefono;
+
+      return await this.empleadoRepository.save(empleadoNuevo);
+    } else {
+      const empleadoExistente = await this.empleadoRepository.findOneBy({
+        id: createEmpleadoDto.id,
+      });
+      if (!empleadoExistente) {
+        // Manejar el caso en que el empleado no existe
+        console.log('Error: El empleado no existe para el ID proporcionado.');
+        return null; // O lanza una excepción según tus necesidades
+      }
+
+      empleadoExistente.nombre = createEmpleadoDto.nombre;
+      empleadoExistente.dni = createEmpleadoDto.dni;
+      empleadoExistente.cuil = createEmpleadoDto.cuil;
+      empleadoExistente.fechaNacimiento = new Date(
+        createEmpleadoDto.fechaNacimiento,
+      );
+      empleadoExistente.direccion = createEmpleadoDto.direccion;
+      empleadoExistente.telefono = createEmpleadoDto.telefono;
+      return await this.empleadoRepository.save(empleadoExistente);
+    }
+  }
+
+  async guardarctividad(empleado: Empleado, createEmpleadoDto: CreateEmpleadoDto): Promise<Actividad> {
+   // const area = new Area();
+   // area.id = createEmpleadoDto.actividad.area.id;
+   // area.nombre = createEmpleadoDto.actividad.area.nombre;
+
+    const actividadExistente = await this.actividadRepository.findOne({
+      where: { empleado: { id: empleado.id } },
+    });
+
+    if (actividadExistente) {
+      actividadExistente.importe = createEmpleadoDto.actividad.importe;
+      actividadExistente.ocupacion = createEmpleadoDto.actividad.ocupacion;
+      // actividadExistente.area = area;
+      actividadExistente.area = createEmpleadoDto.actividad.area;
+      return await this.actividadRepository.save(actividadExistente);
+    } else {
+      const actividadNueva = new Actividad();
+      actividadNueva.importe = createEmpleadoDto.actividad.importe;
+      actividadNueva.ocupacion = createEmpleadoDto.actividad.ocupacion;
+      actividadNueva.empleado = empleado;
+      //actividadNueva.area = area;
+      actividadNueva.area = createEmpleadoDto.actividad.area;
+      return await this.actividadRepository.save(actividadNueva);
+    }
   }
 }

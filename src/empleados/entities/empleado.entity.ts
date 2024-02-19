@@ -5,7 +5,6 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -21,11 +20,11 @@ export class Empleado {
   @Column({ type: 'varchar', length: 120, nullable: false  })
   nombre: string;
 
-  @Column({ type: 'varchar', length: 8, nullable: false  })
+  @Column({ type: 'varchar', length: 8, nullable: false, unique: true  })
   dni: string;
 
-  @Column({ type: 'varchar', length: 11, nullable: false  })
-  cuil?: string;
+  @Column({ type: 'varchar', length: 11, nullable: false, unique: true   })
+  cuil: string;
 
   @Column({ type: 'date', name: 'fecha_nacimiento', nullable: true  })
   fechaNacimiento?: Date;
@@ -39,15 +38,15 @@ export class Empleado {
   @Column({ type: 'varchar', length: 50, nullable: true })
   email?: string;
 
-  @OneToOne(() => Actividad, actividad => actividad.empleado)
+
+  @OneToOne(() => Actividad, actividad => actividad.empleado,{ eager: true })
   actividad: Actividad;
 
   
   @OneToMany(() => AcreditacionEmpleado, acreditacionEmpleado => acreditacionEmpleado.empleado)
   acreditacionEmpleados: AcreditacionEmpleado[];
-  
-}
-/*
+
+
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
@@ -61,5 +60,6 @@ export class Empleado {
   })
   public updated_at: Date;
 
-  */
-
+  @Column({ default: true })
+  is_active: boolean;
+} 

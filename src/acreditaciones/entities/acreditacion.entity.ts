@@ -11,36 +11,53 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+export class ColumnNumericTransformer {
+  to(data: number): number {
+    return data;
+  }
+  from(data: string): number {
+    return parseFloat(data);
+  }
+}
 @Entity({ name: 'acreditacion' })
 export class Acreditacion {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: true })
-  areaID: number;
-
-  @Column({ name: 'total_importe', nullable: true })
+  @Column({
+    name: 'total_importe',
+    nullable: false,
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    transformer: new ColumnNumericTransformer(),
+  })
   totalImporte: number;
 
   @Column({ name: 'total_empleados', nullable: true })
   totalEmpleados: number;
 
-  @Column({ name: 'periodo_mes', nullable: true })
-  periodoMes: number;
+  @Column({
+    name: 'nro_convenio',
+    nullable: false,
+    type: 'varchar',
+    default: '500117PP',
+  })
+  nroConvenio: string;
+
+  @Column({ name: 'periodo', nullable: true })
+  periodo: string;
 
   @ManyToOne(() => Area, (area) => area.acreditaciones)
-  @JoinColumn({ name: 'areaID' })
+  @JoinColumn({ name: 'area_id' })
   area: Area;
 
   @OneToMany(
     () => AcreditacionEmpleado,
-    (acreditacionEmpleado) => acreditacionEmpleado.acreditacion,
-    {
-      cascade: true,
-    },
+    (acreditacionEmpleado) => acreditacionEmpleado.acreditacion
   )
   acreditacionEmpleados: AcreditacionEmpleado[];
-  
+
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
@@ -53,4 +70,7 @@ export class Acreditacion {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   public updated_at: Date;
+
+  @Column({ default: true })
+  is_active: boolean;
 }

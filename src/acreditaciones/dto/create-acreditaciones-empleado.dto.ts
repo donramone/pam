@@ -1,6 +1,6 @@
 export class CreateAcreditacionesEmpleadoDto {
-  empleadoID: number;
-  salario: number;
+  id: number;
+  importe: number;
   acreditacionID: number;
 }
 
