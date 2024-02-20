@@ -44,6 +44,29 @@ export class EmpleadosService {
   async findByArea(id: string): Promise<Empleado[]> {
     const empleados = await this.empleadoRepository
       .createQueryBuilder('empleado')
+      .innerJoin('empleado.actividad', 'actividad')
+      .leftJoin('actividad.area', 'area')
+      .where('actividad.area.id = :id', { id })
+      .select([
+        'empleado.id',
+        'empleado.nombre',
+        'empleado.dni',
+        'empleado.cuil',
+       // 'empleado.direccion',
+        'actividad.importe',
+        'actividad.ocupacion',
+        'actividad.nroCuenta', // Asegúrate de usar el nombre correcto de la propiedad en tu entidad TypeORM
+        'actividad.nroConvenio',
+        'area.id',
+        'area.nombre', // Asegúrate de usar el nombre correcto de la propiedad en tu entidad TypeORM
+      ])
+      .getMany();
+
+    return empleados;
+    /*
+    this.logger.log('Entre aca y lo veor en consola');
+    const empleados = await this.empleadoRepository
+      .createQueryBuilder('empleado')
       .innerJoinAndSelect('empleado.actividad', 'actividad')
       .leftJoinAndSelect('actividad.area', 'area', 'area.id = :id', { id })
       .where('area.id = :id', { id })
@@ -55,14 +78,16 @@ export class EmpleadosService {
         'empleado.direccion',
         'actividad.id',
         'actividad.importe',
-        'actividad.ocupacion',
+     //   'actividad.ocupacion',
         'actividad.nro_convenio',
-        'actividad.nro_cuenta',
-        'area.id',
-        'area.nombre',
+    //    'actividad.nro_cuenta',
+   //     'area.id',
+   //     'area.nombre',
       ])
       .getMany();
+      this.logger.log(JSON.stringify(empleados));
     return empleados;
+    */
   }
 
   // cambiar luego por Save
