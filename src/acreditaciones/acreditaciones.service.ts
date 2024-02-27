@@ -152,7 +152,7 @@ export class AcreditacionesService {
     .select([
       'acreditacion.id',
       'acreditacion.created_at',
-      'acreditacionEmpleado.salario',
+      'acreditacionEmpleado.importe',
       'empleado.nombre',
       'empleado.cuil',
       'actividad.ocupacion',

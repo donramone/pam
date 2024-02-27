@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
+// import { AppService } from './app.service';
 import { AreaModule } from './area/area.module';
 import { EmpleadosModule } from './empleados/empleados.module';
 import { PagosModule } from './pagos/pagos.module';
@@ -22,6 +22,6 @@ import { DataSourceConfig } from './config/data.source';
     PagosModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+ // providers: [AppService],
 })
 export class AppModule {}
