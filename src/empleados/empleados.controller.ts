@@ -41,6 +41,11 @@ export class EmpleadosController {
     return this.empleadosService.findByDni(dni);
   }
   
+  @Get('reporte/:id')
+  findReporteById(@Param('id') id: number) {
+    return this.empleadosService.obtenerReporteAcreditacion(id);
+  }
+
   @Get('area/:areaId')
   findByArea(@Param('areaId') id: string) {
     return this.empleadosService.findByArea(id);

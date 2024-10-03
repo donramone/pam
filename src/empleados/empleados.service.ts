@@ -7,6 +7,7 @@ import { Empleado } from './entities/empleado.entity';
 import { Actividad } from './entities/actividad.entity';
 import { Area } from 'src/area/entities/area.entity';
 import { log } from 'console';
+import { AcreditacionReportDTO } from 'src/acreditaciones/dto/acreditacion-empeado-reporte.dto';
 
 @Injectable()
 export class EmpleadosService {
@@ -58,6 +59,7 @@ export class EmpleadosService {
         'actividad.ocupacion',
         'actividad.nroCuenta', // Asegúrate de usar el nombre correcto de la propiedad en tu entidad TypeORM
         'actividad.nroConvenio',
+        'actividad.estado',
         'area.id',
         'area.nombre', // Asegúrate de usar el nombre correcto de la propiedad en tu entidad TypeORM
       ])
@@ -125,17 +127,45 @@ export class EmpleadosService {
     if (actividadExistente) {
       actividadExistente.importe = createEmpleadoDto.actividad.importe;
       actividadExistente.ocupacion = createEmpleadoDto.actividad.ocupacion;
-      // actividadExistente.area = area;
+      actividadExistente.estado = createEmpleadoDto.actividad.estado;
       actividadExistente.area = createEmpleadoDto.actividad.area;
       return await this.actividadRepository.save(actividadExistente);
     } else {
       const actividadNueva = new Actividad();
       actividadNueva.importe = createEmpleadoDto.actividad.importe;
       actividadNueva.ocupacion = createEmpleadoDto.actividad.ocupacion;
+      actividadNueva.estado = createEmpleadoDto.actividad.estado;
       actividadNueva.empleado = empleado;
-      //actividadNueva.area = area;
       actividadNueva.area = createEmpleadoDto.actividad.area;
       return await this.actividadRepository.save(actividadNueva);
     }
   }
+
+  async obtenerReporteAcreditacion(idEmpleado: number): Promise<AcreditacionReportDTO>  {
+    this.logger.log("Obtener Reporte Acreditacion BY ID:", idEmpleado)
+    const empleado = await this.empleadoRepository.findOne({
+        where: { id: idEmpleado },
+        relations: ['actividad', 'acreditacionEmpleados', 'acreditacionEmpleados.acreditacion', 'acreditacionEmpleados.acreditacion.area'],
+    });
+
+
+    if (!empleado) throw new NotFoundException('Empleado no encontrado');
+
+
+    const reporte = new AcreditacionReportDTO();
+    reporte.nombre = empleado.nombre;
+    reporte.cuil = empleado.cuil;
+    reporte.ocupacion = empleado.actividad.ocupacion;
+    reporte.nroCuenta = empleado.actividad.nroCuenta;
+    reporte.acreditaciones = empleado.acreditacionEmpleados.map(ae => ({
+        id: ae.acreditacion.id,
+        fecha: ae.acreditacion.created_at,
+        periodo: ae.acreditacion.periodo,  // Asegúrate de que estas propiedades existen en tu entidad Acreditacion
+        area: ae.acreditacion.area ? ae.acreditacion.area.nombre : 'No Asignada',
+        importe: ae.importe
+    }));
+
+    return reporte;
+}
+
 }

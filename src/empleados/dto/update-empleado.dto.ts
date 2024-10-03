@@ -15,7 +15,7 @@ export class UpdateEmpleadoDto extends PartialType(CreateEmpleadoDto) {
   email: string;
   ocupacion: string;
   importe: number;
-  // Si solo se llama area me da error??
+  // Si solo se llama area me da error?
   areaId: number;
 }
 */

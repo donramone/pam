@@ -3,9 +3,10 @@ import { Repository } from 'typeorm/repository/Repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AcreditacionEmpleado } from './entities/acreditacionEmpleado.entity';
 import { Acreditacion } from './entities/acreditacion.entity';
-import { CreateAcreditacionDTO } from './dto/create -acreditaciones.dto';
+import { CreateAcreditacionDTO } from './dto/create-acreditaciones.dto';
 import { AcreditacionResponse } from './Interfaces/acreditacion.response';
 import { log } from 'console';
+import { AcreditacionEmpleadosDTO } from './dto/acreditacion-empleado.dto';
 
 @Injectable()
 export class AcreditacionesService {
@@ -56,14 +57,18 @@ export class AcreditacionesService {
   }
 
   async findAcreditacionPorArea(id: number): Promise<Acreditacion[]> {
+   
+    
     const acreditacion = await this.acreditacionRepository
       .createQueryBuilder('acreditacion') 
       .where('acreditacion.area_id = :area_id', { area_id: id }) 
       .getMany();
-    return acreditacion;
+     
+      return acreditacion;
   }
 
   async findAcreditacionPorIdEmpleado(id: number) {
+    /*
     const acreditaciones = await this.acreditacionRepository
       .createQueryBuilder('acreditacion')
       .innerJoin('acreditacion.acreditacionEmpleados', 'acreditacionEmpleado')
@@ -73,7 +78,7 @@ export class AcreditacionesService {
       .select([
         'acreditacion.id',
         'acreditacion.created_at',
-        'acreditacionEmpleado.salario',
+        'acreditacionEmpleado.importe',
         'empleado.nombre',
         'empleado.cuil',
         'actividad.ocupacion',
@@ -81,6 +86,8 @@ export class AcreditacionesService {
       ])
       .where('empleado.id = :empleadoID', { empleadoID: id })
       .getMany();
+
+      this.logger.log(JSON.stringify(acreditaciones))
 
     // Reorganizar la estructura de la respuesta
     const acreditacionNormalizada = {
@@ -95,10 +102,13 @@ export class AcreditacionesService {
         id: acreditacion.id,
         created_at: acreditacion.created_at,
         salario: acreditacion.acreditacionEmpleados[0].importe,
+        area: acreditacion.area ? acreditacion.area.nombre : 'No especificado',
       })),
     };
 
     return acreditacionNormalizada;
+    */
+   return null
   }
 
   async findAcreditacionPorId(id: number):Promise<Acreditacion> {
@@ -189,7 +199,59 @@ export class AcreditacionesService {
     
     return empleadosConAcreditaciones
   }
+
+  async getEmpleadosByNroAcreditacion(nroAcreditacion: number): Promise<AcreditacionEmpleadosDTO> {
+    const acreditacion = await this.acreditacionRepository
+        .createQueryBuilder('acreditacion')
+        .leftJoinAndSelect('acreditacion.acreditacionEmpleados', 'acreditacionEmpleado')
+        .leftJoinAndSelect('acreditacion.area', 'area')
+        .leftJoinAndSelect('acreditacionEmpleado.empleado', 'empleado')
+        .leftJoinAndSelect('empleado.actividad', 'actividad')
+        .where('acreditacion.id = :nroAcreditacion', { nroAcreditacion })
+        .getOne();
+
+    if (!acreditacion) {
+        throw new NotFoundException('Acreditación no encontrada');
+    }
+
+    const response = new AcreditacionEmpleadosDTO();
+    response.areaNombre = acreditacion.area ? acreditacion.area.nombre : 'No especificado';
+    response.fechaAcreditacion = acreditacion.created_at;  // Asegúrate de que esta propiedad existe y es correcta
+    response.periodo = acreditacion.periodo;  // Asegúrate de que esta propiedad existe en tu entidad
+    response.empleados = acreditacion.acreditacionEmpleados.map(ae => ({
+        id: ae.empleado.id,
+        nombre: ae.empleado.nombre,
+        cuil: ae.empleado.cuil,
+        ocupacion: ae.empleado.actividad.ocupacion,
+        importe: ae.importe
+    }));
+
+    return response;
+}
+
+  async getEmpleadosByNroAcreditacion2(nroAcreditacion: number): Promise<AcreditacionResponse> {
+    
+    const acreditacion = await this.acreditacionRepository
+    .createQueryBuilder('acreditacion')
+    .leftJoinAndSelect('acreditacion.acreditacionEmpleados', 'acreditacionEmpleado')
+    .leftJoinAndSelect('acreditacion.area', 'area') 
+    .leftJoinAndSelect('acreditacionEmpleado.empleado', 'empleado')
+    .leftJoinAndSelect('empleado.actividad', 'actividad') // Agregar esta línea para incluir la actividad
+    .where('acreditacion.id = :nroAcreditacion', { nroAcreditacion })
+    .getOne();
+
+  if (!acreditacion) {
+    // Manejo de error si no se encuentra la acreditación
+    throw new NotFoundException('Acreditación no encontrada');
+  }
+
+  return acreditacion;
+
+  }
+
+
   
+  /*
   async getEmpleadosByNroAcreditacion(nroAcreditacion: number) {
 
     const acreditacion = await this.acreditacionRepository
@@ -235,41 +297,6 @@ export class AcreditacionesService {
     return null; // Devolver null si no se encuentra la acreditación
   }
   }
-
-  async getEmpleadosByNroAcreditacion2(nroAcreditacion: number): Promise<AcreditacionResponse> {
-    const acreditacion = await this.acreditacionRepository
-    .createQueryBuilder('acreditacion')
-    .leftJoinAndSelect('acreditacion.acreditacionEmpleados', 'acreditacionEmpleado')
-    .leftJoinAndSelect('acreditacion.area', 'area') 
-    .leftJoinAndSelect('acreditacionEmpleado.empleado', 'empleado')
-    .leftJoinAndSelect('empleado.actividad', 'actividad') // Agregar esta línea para incluir la actividad
-    .where('acreditacion.id = :nroAcreditacion', { nroAcreditacion })
-    .getOne();
-
-  if (!acreditacion) {
-    // Manejo de error si no se encuentra la acreditación
-    throw new NotFoundException('Acreditación no encontrada');
-  }
-
-  return acreditacion;
-
-    /*
-    const acreditacion = await this.acreditacionRepository
-      .createQueryBuilder('acreditacion')
-      .leftJoinAndSelect('acreditacion.acreditacionEmpleados', 'acreditacionEmpleado')
-      .leftJoinAndSelect('acreditacion.area', 'area') 
-      .leftJoinAndSelect('acreditacionEmpleado.empleado', 'empleado')
-      .where('acreditacion.id = :nroAcreditacion', { nroAcreditacion })
-      .getOne();
-  
-    if (!acreditacion) {
-      // Manejo de error si no se encuentra la acreditación
-      throw new NotFoundException('Acreditación no encontrada');
-    }
-  
-    return acreditacion;
-
-    */
-  }
+*/
 
 }

@@ -8,7 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { AcreditacionesService } from './acreditaciones.service';
-import { CreateAcreditacionDTO } from './dto/create -acreditaciones.dto';
+import { CreateAcreditacionDTO } from './dto/create-acreditaciones.dto';
 import { UpdateAcreditacioneDto } from './dto/update-acreditaciones.dto';
 import { Acreditacion } from './entities/acreditacion.entity';
 import { AcreditacionResponse } from './Interfaces/acreditacion.response';
@@ -41,6 +41,7 @@ export class AcreditacionesController {
   @Get('nro/:nro')
   findByNroAcreditacion(@Param('nro') id: number): Promise<AcreditacionResponse> {
     //return this.acreditacionesService.getEmpleadosByNroAcreditacion2(id);
+    // Aca tengo que usar el nuevo metodo que cree para el reporte!!
     return this.acreditacionesService.getEmpleadosByNroAcreditacion2(id);
   }
 

@@ -10,12 +10,19 @@ import { AcreditacionesModule } from './acreditaciones/acreditaciones.module';
 import { DataSourceConfig } from './config/data.source';
 
 
+const ENV = process.env.NODE_ENV;
+console.log(`Loaded env file: ${ENV}`);
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal:true
+      //envFilePath: !ENV ? '.env' : `.env.${ENV}`,
+      //const envFilePath = ENV? === 'production' ? '.env.production' : '.env.development';
+      envFilePath: [`.env.development`],
+      isGlobal: true,
     }),
-    TypeOrmModule.forRoot({...DataSourceConfig}),
+    TypeOrmModule.forRoot({...DataSourceConfig
+      
+    }),
     AcreditacionesModule,
     AreaModule,
     EmpleadosModule,
@@ -24,4 +31,5 @@ import { DataSourceConfig } from './config/data.source';
   controllers: [AppController],
  // providers: [AppService],
 })
+
 export class AppModule {}
