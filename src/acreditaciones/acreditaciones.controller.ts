@@ -57,7 +57,8 @@ export class AcreditacionesController {
 
   @Get('dni/:dni')
   findByDni(@Param('dni') dni: string) {
-   return this.acreditacionesService.findAcreditacionPorDniEmpleado(dni);
+   // return this.acreditacionesService.findAcreditacionPorDniEmpleado(dni);
+   return this.acreditacionesService.findByDni2(dni);
    
   }
 

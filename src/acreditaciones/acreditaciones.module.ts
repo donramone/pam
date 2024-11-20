@@ -19,5 +19,6 @@ import { Empleado } from 'src/empleados/entities/empleado.entity';
   ],
   controllers: [AcreditacionesController],
   providers: [AcreditacionesService],
+  exports: [AcreditacionesService],
 })
 export class AcreditacionesModule {}

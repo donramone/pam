@@ -152,6 +152,7 @@ export class AcreditacionesService {
 }
 
   async findAcreditacionPorDniEmpleado(dni: string) {
+    // TODO aca hacer
     const acreditaciones = await this.acreditacionRepository
     
     .createQueryBuilder('acreditacion')
@@ -191,13 +192,33 @@ export class AcreditacionesService {
   }
 
   async findByDni2(dni: string): Promise<any[]> {
-    const empleadosConAcreditaciones = await this.acreditacionEmpleadoRepository
-    .createQueryBuilder('acreditacionEmpleado')
-    .leftJoinAndSelect('acreditacionEmpleado.empleado', 'empleado')
-    .where('empleado.dni = :dni', { dni: dni })
-    .getMany();
-    
-    return empleadosConAcreditaciones
+  //TODO: estoy seleccionando toda el Area y Acreditacion, ver de poner el area en la tabla AcreditacionEmpleado
+    const acreditaciones = await this.acreditacionEmpleadoRepository
+      .createQueryBuilder('acreditacionEmpleado')
+      .leftJoinAndSelect('acreditacionEmpleado.empleado', 'empleado')
+      .leftJoinAndSelect('acreditacionEmpleado.acreditacion', 'acreditacion')
+      .leftJoinAndSelect('acreditacion.area', 'area') 
+      .select([
+        'acreditacionEmpleado.id',
+        'acreditacionEmpleado.importe',
+        'acreditacionEmpleado.created_at',
+        'empleado.nombre',
+        'empleado.dni',
+        'acreditacion',
+        'area'
+      ])
+      .where('empleado.dni = :dni', { dni })
+      .orderBy('acreditacionEmpleado.created_at', 'DESC')
+      .getMany();
+
+      return acreditaciones.map(acreditacion => ({
+        ID: acreditacion.id,
+        Importe: acreditacion.importe,
+        Area: acreditacion.acreditacion.area.nombre,
+        Fecha: acreditacion.created_at,
+        Empleado: acreditacion.empleado.nombre,
+        DNI: acreditacion.empleado.dni
+      }));
   }
 
   async getEmpleadosByNroAcreditacion(nroAcreditacion: number): Promise<AcreditacionEmpleadosDTO> {

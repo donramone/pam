@@ -8,6 +8,7 @@ import { EmpleadosModule } from './empleados/empleados.module';
 import { PagosModule } from './pagos/pagos.module';
 import { AcreditacionesModule } from './acreditaciones/acreditaciones.module';
 import { DataSourceConfig } from './config/data.source';
+import { ReportsModule } from './reports/reports.module';
 
 
 const ENV = process.env.NODE_ENV;
@@ -27,6 +28,7 @@ console.log(`Loaded env file: ${ENV}`);
     AreaModule,
     EmpleadosModule,
     PagosModule,
+    ReportsModule,
   ],
   controllers: [AppController],
  // providers: [AppService],
