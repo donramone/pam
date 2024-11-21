@@ -8,7 +8,8 @@ export class ReportsController {
 
   @Get('generate-pdf')
   async generatePDF(@Res() res: Response) {
-    const buffer = await this.reportsService.generatePDF();
+    return null;
+    /* const buffer = await this.reportsService.generatePDF();
 
     res.set({
       'Content-Type': 'application/pdf',
@@ -16,7 +17,7 @@ export class ReportsController {
       'Content-Length': buffer.length,
     });
 
-    res.end(buffer);
+    res.end(buffer); */
   }
 
   @Get('generate-pdf/:dni')

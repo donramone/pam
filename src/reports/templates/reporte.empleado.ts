@@ -380,24 +380,25 @@ generarPdfPorAcreditacionEmpleado(data: any) {
   }
   */
 
-  export const reporteAcreditacionEmpleado = (data): TDocumentDefinitions => { 
+  export const reporteAcreditacionEmpleado = (data: AcreditacionEmpleadoReporte): TDocumentDefinitions => { 
     console.log(data) // aca logeo lo que te paso chatgpt
+ 
     return {
       content: [
         { text: 'Informe de Acreditaciones', style: 'header' },
-        { text: `Empleado: ${data[0].empleado}`, style: 'subheader' },
-        { text: `Ocupación: ${data[0].ocupacion}`, style: 'subheader' },
+        { text: `Empleado: ${data.empleado.nombre}`, style: 'subheader' },
+        { text: `Ocupación: ${data.empleado.ocupacion}`, style: 'subheader' },
         { text: 'Acreditaciones:', style: 'subheader' },
         {
           table: {
             headerRows: 1,
-            widths: ['auto', '*', '*'],
+            widths: ['auto', '*', '*', '*'],
             body: [
-              ['ID', 'Fecha', "Salario" ],
-              ...data.map(acreditacion => [
-               // acreditacion.id,
-              "ID",
-               new Date(acreditacion.fecha).toLocaleDateString('es-ES'),
+              ['ID Acreditacion', 'Fecha', 'Periodo', 'Importe' ],
+              ...data.acreditaciones.map(acreditacion => [
+               acreditacion.id,
+               new Date(acreditacion.created_at).toLocaleDateString('es-ES'),
+               acreditacion.periodo,
                Number(acreditacion.importe).toFixed(2),
               ])
             ]

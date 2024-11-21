@@ -152,28 +152,29 @@ export class AcreditacionesService {
 }
 
   async findAcreditacionPorDniEmpleado(dni: string) {
-    // TODO aca hacer
+    // TODO
     const acreditaciones = await this.acreditacionRepository
     
     .createQueryBuilder('acreditacion')
     .innerJoin('acreditacion.acreditacionEmpleados', 'acreditacionEmpleado')
-    .leftJoin('acreditacionEmpleado.empleado', 'empleado')
-    .leftJoin('empleado.actividad', 'actividad')
-    .leftJoin('acreditacion.area', 'area') // Unión con la tabla de área
+    .leftJoinAndSelect('acreditacionEmpleado.empleado', 'empleado')
+    .leftJoinAndSelect('empleado.actividad', 'actividad')
+    .leftJoinAndSelect('acreditacion.area', 'area') 
     .select([
       'acreditacion.id',
       'acreditacion.created_at',
+      'acreditacion.periodo',
       'acreditacionEmpleado.importe',
       'empleado.nombre',
       'empleado.cuil',
       'actividad.ocupacion',
-      'area.nombre ', // Seleccionar el campo "nombre" de la tabla "area"
+      'area.nombre ', // SI no pongo .nombre me da error poner solo area ¿?
     ])
     .where('empleado.dni = :dni', { dni: dni})
     .getMany();
 
-  // Reorganizar la estructura de la respuesta
-  const acreditacionNormalizada = {
+  // mw falta agregar el area
+  const acreditacionNormalizada : AcreditacionEmpleadoReporte = {
     empleado: {
       nombre: acreditaciones[0].acreditacionEmpleados[0].empleado.nombre,
       cuil: acreditaciones[0].acreditacionEmpleados[0].empleado.cuil,
@@ -184,7 +185,9 @@ export class AcreditacionesService {
     acreditaciones: acreditaciones.map((acreditacion) => ({
       id: acreditacion.id,
       created_at: acreditacion.created_at,
-      salario: acreditacion.acreditacionEmpleados[0].importe,
+      periodo: acreditacion.periodo,
+      importe: acreditacion.acreditacionEmpleados[0].importe,
+
     })),
   };
 

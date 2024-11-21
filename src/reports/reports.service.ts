@@ -20,9 +20,10 @@ export class ReportsService {
     private readonly acreditacionesService: AcreditacionesService,
     private readonly printerService: PrinterService,
   ) {}
+ /*
   async generatePDF(): Promise<Buffer> {
 
-   //  const printer = new PdfPrinter(fonts);
+ 
 
     const docDefinition: TDocumentDefinitions = {
       content: [
@@ -71,10 +72,10 @@ export class ReportsService {
       }
     });
   }
-
+*/
   async empleadoReport(dni: string): Promise<Buffer> {
     // Obtener datos de acreditaciones
-    const data = await this.acreditacionesService.findByDni2(dni);
+    const data = await this.acreditacionesService.findAcreditacionPorDniEmpleado(dni);
     const dd = reporteAcreditacionEmpleado(data);
 
     // Definir el contenido del PDF
@@ -87,7 +88,7 @@ export class ReportsService {
             widths: ['*', '*'],
             body: [
               ['Campo 1', 'Campo 2'],
-              ...data.map((item) => ["xzxzx", "cdvxcvcv"]),
+              ...data.acreditaciones.map((item) => ["xzxzx", "cdvxcvcv"]),
             ],
           },
         },
@@ -97,8 +98,6 @@ export class ReportsService {
         subheader: { fontSize: 14, margin: [0, 10, 0, 10] },
       },
     };
-
-    // const printer = new PdfPrinter(fonts);
     // Generar el PDF
     const pdfDoc = this.printerService.createPdf(dd);
     // Convierte el documento a Buffer
