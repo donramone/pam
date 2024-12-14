@@ -56,7 +56,7 @@ export class AcreditacionesService {
     return await this.acreditacionRepository.find();
   }
 
-  async findAcreditacionPorArea(id: number): Promise<Acreditacion[]> {
+  async findAcreditacionPorArea(id: string): Promise<Acreditacion[]> {
    
     
     const acreditacion = await this.acreditacionRepository

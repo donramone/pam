@@ -46,7 +46,7 @@ export class AcreditacionesController {
   }
 
   @Get('area/:areaId')
-  findByArea(@Param('areaId') id: number) {
+  findByArea(@Param('areaId') id: string) {
     return this.acreditacionesService.findAcreditacionPorArea(id);
   }
 
