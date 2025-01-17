@@ -157,22 +157,25 @@ export class AcreditacionesService {
     
     .createQueryBuilder('acreditacion')
     .innerJoin('acreditacion.acreditacionEmpleados', 'acreditacionEmpleado')
-    .leftJoinAndSelect('acreditacionEmpleado.empleado', 'empleado')
-    .leftJoinAndSelect('empleado.actividad', 'actividad')
-    .leftJoinAndSelect('acreditacion.area', 'area') 
+    .leftJoin('acreditacionEmpleado.empleado', 'empleado')
+    .leftJoin ('empleado.actividad', 'actividad')
+    .leftJoin('acreditacion.area', 'area') 
     .select([
       'acreditacion.id',
       'acreditacion.created_at',
+      'acreditacion.nro_convenio',
       'acreditacion.periodo',
       'acreditacionEmpleado.importe',
       'empleado.nombre',
       'empleado.cuil',
       'actividad.ocupacion',
+
       'area.nombre ', // SI no pongo .nombre me da error poner solo area ¿?
     ])
     .where('empleado.dni = :dni', { dni: dni})
     .getMany();
 
+    this.logger.log(JSON.stringify(acreditaciones, null, 2));
   // mw falta agregar el area
   const acreditacionNormalizada : AcreditacionEmpleadoReporte = {
     empleado: {
@@ -186,6 +189,7 @@ export class AcreditacionesService {
       id: acreditacion.id,
       created_at: acreditacion.created_at,
       periodo: acreditacion.periodo,
+      nroConvenio: acreditacion.nroConvenio,
       importe: acreditacion.acreditacionEmpleados[0].importe,
 
     })),
@@ -275,52 +279,5 @@ export class AcreditacionesService {
 
 
   
-  /*
-  async getEmpleadosByNroAcreditacion(nroAcreditacion: number) {
-
-    const acreditacion = await this.acreditacionRepository
-    .createQueryBuilder('acreditacion')
-    .leftJoinAndSelect(
-      'acreditacion.acreditacionEmpleados',
-      'acreditacion_empleado',
-    )
-    .leftJoinAndSelect('acreditacion.area', 'area')
-    .leftJoinAndSelect('acreditacion_empleado.empleado', 'empleado')
-    .select([
-      'acreditacion.id',
-      'acreditacion.areaID',
-      'area.nombre',
-      'acreditacion.totalImporte',
-      'acreditacion.totalEmpleados',
-      'acreditacion.periodoMes',
-      'acreditacion.nro_convenio',
-      'acreditacion_empleado.importe',
-      'acreditacion_empleado.nro_cuenta',
-      'empleado.id',
-      'empleado.nombre',
-      'empleado.cuil',
-    ])
-    .where('acreditacion.id = :nroAcreditacion', { nroAcreditacion })
-    .getOne();
-
-  if (acreditacion) {
-    // Transformar la respuesta para tener id, nombre y cuil en el mismo nivel que salario
-    const acreditacionTransformada = {
-      ...acreditacion,
-      acreditacionEmpleados: acreditacion.acreditacionEmpleados.map((acreditacionEmpleado) => ({
-        salario: acreditacionEmpleado.importe,
-        nroCuentaBancaria: acreditacionEmpleado.nroCuenta,
-        id: acreditacionEmpleado.empleado.id,
-        nombre: acreditacionEmpleado.empleado.nombre,
-        cuil: acreditacionEmpleado.empleado.cuil,
-      })),
-    };
-
-    return acreditacionTransformada;
-  } else {
-    return null; // Devolver null si no se encuentra la acreditación
-  }
-  }
-*/
 
 }

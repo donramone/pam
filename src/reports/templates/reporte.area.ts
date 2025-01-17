@@ -5,7 +5,8 @@ import { Acreditacion } from "src/acreditaciones/entities/acreditacion.entity";
 export const reporteAcreditacionArea = (
     acreditacion: any,
 ): any => {
-    console.log("La acreditacion es: ");
+   // TODO ver formato de acreditacion por console y luego typear la acreditacion para no usar any
+    console.log("El reporte de la acreditacion por ID es: ");
     
     console.log(acreditacion) // aca logeo lo que te paso chatgpt
     const docDefinition = {

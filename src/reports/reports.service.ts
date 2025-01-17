@@ -21,59 +21,7 @@ export class ReportsService {
     private readonly acreditacionesService: AcreditacionesService,
     private readonly printerService: PrinterService,
   ) {}
- /*
-  async generatePDF(): Promise<Buffer> {
 
- 
-
-    const docDefinition: TDocumentDefinitions = {
-      content: [
-        { text: 'Ejemplo de PDF con pdfmake', style: 'header' },
-        {
-          text: [
-            'Este es un párrafo de ejemplo. ',
-            { text: 'Texto en negrita', bold: true },
-            ' y más texto normal.',
-          ],
-        },
-        {
-          style: 'tableExample',
-          table: {
-            body: [
-              ['Columna 1', 'Columna 2', 'Columna 3'],
-              ['Valor 1', 'Valor 2', 'Valor 3'],
-              ['Valor 4', 'Valor 5', 'Valor 6'],
-            ],
-          },
-        },
-      ],
-      styles: {
-        header: {
-          fontSize: 18,
-          bold: true,
-          margin: [0, 0, 0, 10],
-        },
-        tableExample: {
-          margin: [0, 5, 0, 15],
-        },
-      },
-    };
-
-    // Genera el PDF
-    const pdfDoc = this.printerService.createPdf(docDefinition)
-    // Convierte el documento a Buffer
-    return new Promise((resolve, reject) => {
-      try {
-        const chunks: Uint8Array[] = [];
-        pdfDoc.on('data', (chunk) => chunks.push(chunk));
-        pdfDoc.on('end', () => resolve(Buffer.concat(chunks)));
-        pdfDoc.end();
-      } catch (err) {
-        reject(err);
-      }
-    });
-  }
-*/
 async acreditacionReport(id: string): Promise<Buffer> {
       // Obtener datos de acreditaciones
       const numero: number = parseInt(id)

@@ -4,9 +4,11 @@ export const reporteAcreditacionEmpleado = (
 ): TDocumentDefinitions => {
   return {
     content: [
-      { text: 'Informe de Acreditaciones', style: 'header' },
+      { text: 'Listado de Acreditaciones', style: 'header' },
       { text: `Empleado: ${data.empleado.nombre}`, style: 'subheader' },
+      { text: `CUIL: ${data.empleado.cuil}`, style: 'subheader' },
       { text: `Ocupación: ${data.empleado.ocupacion}`, style: 'subheader' },
+      { text: `Convenio Nro: ${data.acreditaciones[1].nroConvenio}`, style: 'subheader' },
       { text: 'Acreditaciones:', style: 'subheader' },
       {
         table: {

@@ -30,6 +30,7 @@ console.log(`Loading environment variables from: ${envFilePath}`);
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         ...createDataSourceOptions(configService),
+        logging: true, // Habilita logs de SQL
       }),
     }),
     AcreditacionesModule,

@@ -8,6 +8,7 @@ interface AcreditacionEmpleadoReporte {
       id: number;
       created_at: Date; // aca cambiar por fecha
       periodo: string;
+      nroConvenio: string;
       importe: number;
     }[];
   }

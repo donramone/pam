@@ -35,7 +35,7 @@ export class Actividad {
 
   @Column({ nullable: true, type: 'decimal', precision: 10, scale: 2, default: 0.0, transformer: new ColumnNumericTransformer() })
   importe: number;
-
+  // estaActivo
   @Column({ nullable: false, type: 'boolean', default:true })
   estado: boolean;
 
